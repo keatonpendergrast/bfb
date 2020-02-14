@@ -1,0 +1,32 @@
+---
+title: "opioid"
+author: "Keaton Pendergrast"
+date: "2/13/2020"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(foreign)
+library(funModeling)
+library(Hmisc)
+library(DataExplorer)
+library(osfr)
+```
+
+```{r}
+seven <- read.table("/Users/keatonpendergrast/Desktop/302w/project/datasets/2007.tsv", sep = '\t', header = TRUE)
+eight <- read.table("/Users/keatonpendergrast/Desktop/302w/project/datasets/2008.tsv", sep = '\t', header = TRUE)
+nine <- read.table("/Users/keatonpendergrast/Desktop/302w/project/datasets/2009.tsv", sep = '\t', header = TRUE)
+eleven <- read.dta("/Users/keatonpendergrast/Desktop/302w/project/datasets/2011.dta")
+twelve <- read.dta("/Users/keatonpendergrast/Desktop/302w/project/datasets/2012.dta")
+thirteen <- read.dta("/Users/keatonpendergrast/Desktop/302w/project/datasets/2013.dta")
+fourteen <- read.dta("/Users/keatonpendergrast/Desktop/302w/project/datasets/2014.dta")
+fifteen <- read.dta("/Users/keatonpendergrast/Desktop/302w/project/datasets/2015.dta")
+sixteen <- read.dta("/Users/keatonpendergrast/Desktop/302w/project/datasets/2016.dta")
+```
+
+```{r}
+
+```
+
