@@ -12,7 +12,6 @@ library(foreign)
 library(funModeling)
 library(Hmisc)
 library(DataExplorer)
-library(osfr)
 ```
 
 ```{r}
@@ -20,6 +19,7 @@ library(osfr)
 seven <- read.table("/Users/keatonpendergrast/Desktop/302w/project/datasets/2007.tsv", sep = '\t', header = TRUE)
 eight <- read.table("/Users/keatonpendergrast/Desktop/302w/project/datasets/2008.tsv", sep = '\t', header = TRUE)
 nine <- read.table("/Users/keatonpendergrast/Desktop/302w/project/datasets/2009.tsv", sep = '\t', header = TRUE)
+ten <- read.csv("/Users/lindsaychen/Downloads/namcs2010.csv")
 eleven <- read.dta("/Users/keatonpendergrast/Desktop/302w/project/datasets/2011.dta")
 twelve <- read.dta("/Users/keatonpendergrast/Desktop/302w/project/datasets/2012.dta")
 thirteen <- read.dta("/Users/keatonpendergrast/Desktop/302w/project/datasets/2013.dta")
@@ -36,6 +36,8 @@ eight_clean <- select(eight, PHYCODE, PATCODE, SENBEFOR, INJURY, CONTSUB1, CONTS
 
 nine_clean <- select(nine, PHYCODE, PATCODE, SENBEFOR, INJURY, CONTSUB1, CONTSUB2, CONTSUB3, CONTSUB4, CONTSUB5, CONTSUB6, CONTSUB7, CONTSUB8, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8, NCMED1, NCMED2, NCMED3, NCMED4, NCMED5, NCMED6, NCMED7, NCMED8)
 
+ten_clean <- select(ten, PHYCODE, PATCODE, SENBEFOR, INJURY, CONTSUB1, CONTSUB2, CONTSUB3, CONTSUB4, CONTSUB5, CONTSUB6, CONTSUB7, CONTSUB8, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8, NCMED1, NCMED2, NCMED3, NCMED4, NCMED5, NCMED6, NCMED7, NCMED8)
+
 eleven_clean <- select(eleven, PHYCODE, PATCODE, SENBEFOR, INJURY, CONTSUB1, CONTSUB2, CONTSUB3, CONTSUB4, CONTSUB5, CONTSUB6, CONTSUB7, CONTSUB8, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8, NCMED1, NCMED2, NCMED3, NCMED4, NCMED5, NCMED6, NCMED7, NCMED8)
 
 twelve_clean <- select(twelve, PHYCODE, PATCODE, SENBEFOR, INJURY, CONTSUB1, CONTSUB2, CONTSUB3, CONTSUB4, CONTSUB5, CONTSUB6, CONTSUB7, CONTSUB8, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8, NCMED1, NCMED2, NCMED3, NCMED4, NCMED5, NCMED6, NCMED7, NCMED8)
@@ -47,4 +49,6 @@ fourteen_clean <- select(fourteen, PHYCODE, PATCODE, SENBEFOR, INJURY, CONTSUB1,
 fifteen_clean <- select(fifteen, PHYCODE, PATCODE, SENBEFOR, INJURY, CONTSUB1, CONTSUB2, CONTSUB3, CONTSUB4, CONTSUB5, CONTSUB6, CONTSUB7, CONTSUB8, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8, NCMED1, NCMED2, NCMED3, NCMED4, NCMED5, NCMED6, NCMED7, NCMED8)
 
 sixteen_clean <- select(sixteen, PHYCODE, PATCODE, SENBEFOR, INJURY, CONTSUB1, CONTSUB2, CONTSUB3, CONTSUB4, CONTSUB5, CONTSUB6, CONTSUB7, CONTSUB8, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8, NCMED1, NCMED2, NCMED3, NCMED4, NCMED5, NCMED6, NCMED7, NCMED8)
+
+
 ```
