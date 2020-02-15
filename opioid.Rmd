@@ -12,6 +12,7 @@ library(foreign)
 library(funModeling)
 library(Hmisc)
 library(DataExplorer)
+library(httr)
 ```
 
 ```{r}
