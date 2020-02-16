@@ -87,5 +87,10 @@ sixteen_clean <- sixteen %>%
 ```
 
 ```{r}
+hi <-eight_clean %>%
+  filter(((RFV1 > 5004) & (RFV1 < 5130)) | ((RFV1 > 5404) & (RFV1 < 5576)) | ((RFV2 > 5004) & (RFV2 < 5130)) | ((RFV2 > 5404) & (RFV2 < 5576)) | ((RFV3 > 5004) & (RFV3 < 5130)) | ((RFV3 > 5404) & (RFV3 < 5576)))
+```
+
+```{r}
 plot_str(sixteen_clean)
 ```
