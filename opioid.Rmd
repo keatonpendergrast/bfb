@@ -88,9 +88,38 @@ sixteen_clean <- sixteen %>%
 ```
 
 ```{r}
-hi <-filter(eight_clean, RFV1 >= 5004 & RFV1 <= 5130)
+seven_ok <- filter(seven_clean, INJURY == 0)
+seven_injured <- filter(seven_clean, INJURY == 1)
+
+eight_ok <- filter(eight_clean, INJURY == 0)
+eight_injured <- filter(eight_clean, INJURY == 1)
+
+
+nine_injured <- filter(nine_clean, INJURY == 1)
+nine_ok <- filter(nine_clean, INJURY == 0)
+
+ten_injured <- filter(ten_clean, INJURY == 1)
+ten_ok <- filter(ten_clean, INJURY == 0)
+
+eleven_injured <- filter(eleven_clean, INJURY == "Yes")
+eleven_ok <- filter(eleven_clean, INJURY == "No")
+
+twelve_injured <- filter(twelve_clean, INJURY == "Yes")
+twelve_ok <- filter(twelve_clean, INJURY == "No")
+
+thirteen_injured <- filter(thirteen_clean, INJURY == "Yes")
+thirteen_ok <- filter(thirteen_clean, INJURY == "No")
+
+fourteen_injured <- filter(fourteen_clean, INJURY == "Yes")
+fourteen_ok <- filter(fourteen_clean, INJURY == "No")
+
+fifteen_injured <- filter(fifteen_clean, INJURY == "Yes")
+fifteen_ok <- filter(fifteen_clean, INJURY == "No")
+
+sixteen_injured <- filter(sixteen_clean, INJURY == "Yes")
+sixteen_ok <- filter(sixteen_clean, INJURY == "No")
 ```
 
 ```{r}
-plot_str(sixteen_clean)
+plot_str(seven_injured)
 ```
