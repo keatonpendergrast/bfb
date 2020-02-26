@@ -18,7 +18,7 @@ require(tikzDevice)
 ```
 
 ```{r}
-#pull in the datasets
+#pull in the datasets from 2006 to 2016
 urlfile="https://media.githubusercontent.com/media/keatonpendergrast/bfb/master/2006.tsv"
 
 six <- read.csv(url(urlfile))
