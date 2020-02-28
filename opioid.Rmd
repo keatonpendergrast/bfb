@@ -255,11 +255,21 @@ six_drug <- rbind(six_drug1, six_drug2)
 ```
 
 ```{r}
+(sum(sixteen_drug$PATWT)/sum(ten_clean$PATWT))*1000
+(sum(fifteen_drug$PATWT)/sum(fifteen_clean$PATWT))*1000
+(sum(fourteen_drug$PATWT)/sum(fourteen_clean$PATWT))*1000
+(sum(thirteen_drug$PATWT)/sum(thirteen_clean$PATWT))*1000
+(sum(twelve_drug$PATWT)/sum(twelve_clean$PATWT))*1000
+(sum(eleven_drug$PATWT)/sum(eleven_clean$PATWT))*1000
 (sum(ten_drug$PATWT)/sum(ten_clean$PATWT))*1000
-hi
+(sum(nine_drug$PATWT)/sum(nine_clean$PATWT))*1000
+(sum(eight_drug$PATWT)/sum(eight_clean$PATWT))*1000
+(sum(seven_drug$PATWT)/sum(seven_clean$PATWT))*1000
+(sum(six_drug$PATWT)/sum(six_clean$PATWT))*1000
 ```
 
 
+```{r}
 ```{r}
 plot_str()
 ```
