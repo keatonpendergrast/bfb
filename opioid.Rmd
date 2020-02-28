@@ -277,6 +277,11 @@ proportion
 ```
 
 ```{r}
-plot_str()
+six_k <- six_clean %>%
+  mutate(MED = )
+```
+
+```{r}
+plot_str(ten_drug)
 ```
 
