@@ -276,6 +276,16 @@ proportion = c((sum(six_drug$PATWT)/sum(six_clean$PATWT))*1000, (sum(seven_drug$
 proportion
 ```
 
+
+```{r}
+require(ggplot2)
+ggplot(proportion, aes(x = year, y = proportion)) + 
+  geom_bar(stat = "identity") + 
+  ylab("Proportion of Patients") + 
+  xlab("Year") 
+  
+```
+
 ```{r}
 plot_str()
 ```
