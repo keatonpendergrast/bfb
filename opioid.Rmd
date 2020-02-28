@@ -255,7 +255,7 @@ six_drug <- rbind(six_drug1, six_drug2)
 ```
 
 ```{r}
-(sum(sixteen_drug$PATWT)/sum(ten_clean$PATWT))*1000
+(sum(sixteen_drug$PATWT)/sum(sixteen_clean$PATWT))*1000
 (sum(fifteen_drug$PATWT)/sum(fifteen_clean$PATWT))*1000
 (sum(fourteen_drug$PATWT)/sum(fourteen_clean$PATWT))*1000
 (sum(thirteen_drug$PATWT)/sum(thirteen_clean$PATWT))*1000
@@ -268,8 +268,14 @@ six_drug <- rbind(six_drug1, six_drug2)
 (sum(six_drug$PATWT)/sum(six_clean$PATWT))*1000
 ```
 
-
 ```{r}
+proportion <- data.frame(
+year = c(2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016),
+proportion = c((sum(six_drug$PATWT)/sum(six_clean$PATWT))*1000, (sum(seven_drug$PATWT)/sum(seven_clean$PATWT))*1000, (sum(eight_drug$PATWT)/sum(eight_clean$PATWT))*1000, (sum(nine_drug$PATWT)/sum(nine_clean$PATWT))*1000, (sum(ten_drug$PATWT)/sum(ten_clean$PATWT))*1000, (sum(eleven_drug$PATWT)/sum(eleven_clean$PATWT))*1000, (sum(twelve_drug$PATWT)/sum(twelve_clean$PATWT))*1000, (sum(thirteen_drug$PATWT)/sum(thirteen_clean$PATWT))*1000, (sum(fourteen_drug$PATWT)/sum(fourteen_clean$PATWT))*1000, (sum(fifteen_drug$PATWT)/sum(fifteen_clean$PATWT))*1000, (sum(sixteen_drug$PATWT)/sum(sixteen_clean$PATWT))*1000))
+
+proportion
+```
+
 ```{r}
 plot_str()
 ```
