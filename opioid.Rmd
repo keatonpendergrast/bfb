@@ -256,6 +256,7 @@ six_drug <- rbind(six_drug1, six_drug2)
 
 ```{r}
 (sum(ten_drug$PATWT)/sum(ten_clean$PATWT))*1000
+hi
 ```
 
 
