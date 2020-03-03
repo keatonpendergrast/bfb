@@ -299,14 +299,11 @@ pairwise
 ```
 
 ```{r}
-res.aov <- aov(yes ~ no, data = pairwise)
-summary(res.aov)
-
-chisq.test(rbind(c((sum(six_drug$PATWT)/sum(six_clean$PATWT))*1000, (sum(seven_drug$PATWT)/sum(seven_clean$PATWT))*1000, (sum(eight_drug$PATWT)/sum(eight_clean$PATWT))*1000, (sum(nine_drug$PATWT)/sum(nine_clean$PATWT))*1000, (sum(ten_drug$PATWT)/sum(ten_clean$PATWT))*1000, (sum(eleven_drug$PATWT)/sum(eleven_clean$PATWT))*1000, (sum(twelve_drug$PATWT)/sum(twelve_clean$PATWT))*1000, (sum(thirteen_drug$PATWT)/sum(thirteen_clean$PATWT))*1000, (sum(fourteen_drug$PATWT)/sum(fourteen_clean$PATWT))*1000, (sum(fifteen_drug$PATWT)/sum(fifteen_clean$PATWT))*1000, (sum(sixteen_drug$PATWT)/sum(sixteen_clean$PATWT))*1000)))
-
 pairwiseprop <- pairwise.prop.test(pairwise$yes, pairwise$no)
 pairwiseprop
+```
 
+```{r}
 proptrend <- prop.trend.test(pairwise$yes, pairwise$no)
 proptrend
 ```
@@ -318,7 +315,8 @@ ggplot(proportion, aes(x = year, y = proportion)) +
   ylab("Proportion of Patients") + 
   xlab("Year") 
   
-scatter.smooth(x=proportion$year, y=proportion$proportion)
+scatter.smooth(x=proportion$year, y=proportion$proportion) +
+  title(main="Opioid Prescriptions Per Capita")
 
 ggplot(proportion, aes(x = year, y = proportion)) + geom_point() + 
              stat_smooth(method ="lm", se = FALSE)
@@ -330,6 +328,49 @@ cor(proportion$year, proportion$proportion)
 
 linearMod <- lm(yes ~ no, data=pairwise)
 summary(linearMod)
+
+# creating least-squares method for fitting a parametric line
+M <- lm(proportion ~ year, dat = proportion)
+
+# fitting a 2nd order polynomial
+M2 <- lm(proportion ~ year + I(year^2) , dat = proportion)
+
+# fit loess function
+lo <- loess(proportion ~ year, proportion, span = 0.5, degree = 1)
+
+# creating a residual dependence plot
+proportion$residuals <- residuals(M)
+ggplot(proportion, aes(x = year, y = residuals)) + geom_point() +
+             stat_smooth(method = "loess", se = FALSE, span = 1, 
+                         method.args = list(degree = 1) )
+
+# previous model had convex line, so creating the plot using the second degree polynomial
+proportion$residuals2 <- residuals(M2)
+ggplot(proportion, aes(x = year, y = residuals2)) + geom_point() +
+               stat_smooth(method = "loess", se = FALSE, span = 1, 
+                           method.args = list(degree = 1) )
+
+# second degree was good fit, but just checking if loess has an improvement
+proportion$residuals3 <- residuals(lo)
+ggplot(proportion, aes(x = year, y = residuals3)) + geom_point() +
+               stat_smooth(method = "loess", se = FALSE, span = 1, method.args = list(degree = 1) )
+
+# using the second degree to create a spread location plot
+sl2 <- data.frame( std.res = sqrt(abs(residuals(M2))), 
+                   fit     = predict(M2))
+
+ggplot(sl2, aes(x = fit, y  =std.res)) + geom_point() +
+              stat_smooth(method = "loess", se = FALSE, span = 1, 
+                          method.args = list(degree = 1) )
+
+ggplot(sl2, aes(x = fit, y = std.res)) + geom_point() +
+              stat_smooth(method = "loess", se = FALSE, span = 1.5, 
+                          method.args = list(degree = 1) )
+
+# checking residuals for normality
+ggplot(proportion, aes(sample = residuals2)) + geom_qq(distribution = qnorm) +
+  geom_qq_line(distribution = qnorm, col = "blue")
+
 ```
 
 ```{r}
