@@ -287,11 +287,10 @@ pairwise <- proportion %>%
 pairwise <- proportion %>%
   mutate(yes = proportion/100)
 
-pairwise <- pairwise %>%
-  mutate(no = (100-proportion)/100)
+pairwise$no <- rep(1000,nrow(pairwise))
 
 pairwise <- pairwise %>%
-  mutate(yes = yes*1000, no = no*1000)
+  mutate(yes = yes*1000)
 
 pairwise <- pairwise %>%
   select(yes, no)
@@ -319,8 +318,15 @@ ggplot(proportion, aes(x = year, y = proportion)) +
   ylab("Proportion of Patients") + 
   xlab("Year") 
   
-scatter.smooth(x=proportion$proportion_yes, y=proportion$no)
-cor(pairwise$year, proportion$proportion)
+scatter.smooth(x=proportion$year, y=proportion$proportion)
+
+ggplot(proportion, aes(x = year, y = proportion)) + geom_point() + 
+             stat_smooth(method ="lm", se = FALSE)
+
+ggplot(proportion, aes(x = year, y = proportion)) + geom_point() + 
+  stat_smooth(method = "lm", se = FALSE, formula = y ~  x + I(x^2) )
+
+cor(proportion$year, proportion$proportion)
 
 linearMod <- lm(yes ~ no, data=pairwise)
 summary(linearMod)
