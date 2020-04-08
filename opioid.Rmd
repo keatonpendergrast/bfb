@@ -15,6 +15,9 @@ require(dplyr)
 require(DataExplorer)
 require(readr)
 require(tikzDevice)
+require(usethis)
+
+usethis::git_sitrep()
 ```
 
 ```{r}
@@ -274,6 +277,16 @@ six_drug$year <- rep(2006,nrow(six_drug))
 years <- rbind(sixteen_drug, fifteen_drug, fourteen_drug, thirteen_drug, twelve_drug, eleven_drug, ten_drug, nine_drug, eight_drug, seven_drug, six_drug)
 
 years
+
+mentalpatients <- rbind(sixteen_clean, fifteen_clean, fourteen_clean, thirteen_clean, twelve_clean, eleven_clean, ten_clean, nine_clean, eight_clean, seven_clean, six_clean)
+
+mentalpatients
+
+mentalcount <- data.frame(
+year = c(2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016),
+patientcount = c((sum(six_clean$PATWT)), (sum(seven_clean$PATWT)), (sum(eight_clean$PATWT)), (sum(nine_clean$PATWT)), (sum(ten_clean$PATWT)), (sum(eleven_clean$PATWT)), (sum(twelve_clean$PATWT)), (sum(thirteen_clean$PATWT)), (sum(fourteen_clean$PATWT)), (sum(fifteen_clean$PATWT)), (sum(sixteen_clean$PATWT))))
+
+summary(mentalcount)
 ```
 
 ```{r}
@@ -317,6 +330,8 @@ ggplot(proportion, aes(x = year, y = proportion)) +
   
 scatter.smooth(x=proportion$year, y=proportion$proportion) +
   title(main="Opioid Prescriptions Per Capita")
+
+write.csv(proportion, file = "proportion.csv")
 
 ggplot(proportion, aes(x = year, y = proportion)) + geom_point() + 
              stat_smooth(method ="lm", se = FALSE)
@@ -374,6 +389,22 @@ ggplot(proportion, aes(sample = residuals2)) + geom_qq(distribution = qnorm) +
 ```
 
 ```{r}
-plot_str(ten_drug)
+	    #yes		no		total
+#2008 40.80	  1000		1040.8
+#2016 206.19	1000		1206.19
+
+#for 2008:
+#the probability of patients getting opioid:  40.80/1040.8 = 3.92%
+#the probability of patients not getting opioid: 1000/1040.8 = 96.08%
+#the odds of patients getting opioid: 0.0408
+
+#for 2016:
+#the probability of patients getting opioid:  206.19/1206.19 = 17.09%
+#the probability of patients not getting opioid: 1000/1206.19 = 82.91%
+#the odds of patients getting opioid: 0.2061
+
+#the ratio of the odds of 2016 getting opioids to the odds for 2008 getting opioids is: 5.05
+	#for 2016 the odds of getting opioids are:
+		#5.05 times larger (505% higher) than 2008 getting them
 ```
 
