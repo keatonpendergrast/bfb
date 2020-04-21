@@ -312,6 +312,36 @@ pairwise
 ```
 
 ```{r}
+	    #yes		no		total
+#2008 40.80	  1000		1040.8
+#2016 206.19	1000		1206.19
+
+#for 2008:
+#the probability of patients getting opioid:  40.80/1040.8 = 3.92%
+#the probability of patients not getting opioid: 1000/1040.8 = 96.08%
+#the odds of patients getting opioid: 0.0408
+
+#for 2016:
+#the probability of patients getting opioid:  206.19/1206.19 = 17.09%
+#the probability of patients not getting opioid: 1000/1206.19 = 82.91%
+#the odds of patients getting opioid: 0.2061
+
+#the ratio of the odds of 2016 getting opioids to the odds for 2008 getting opioids is: 5.05
+	#for 2016 the odds of getting opioids are:
+		#5.05 times larger (505% higher) than 2008 getting them
+```
+
+```{r}
+odds <- pairwise %>%
+  mutate(probability_yes = (yes/(yes+no))*100) %>%
+  mutate(probability_no = (no/(yes+no))*100) %>%
+  mutate(odds = probability_yes/probability_no) %>%
+  select(odds) %>%
+  mutate(compared_2016 = 0.20619267/odds)
+odds
+```
+
+```{r}
 pairwiseprop <- pairwise.prop.test(pairwise$yes, pairwise$no)
 pairwiseprop
 ```
@@ -388,23 +418,5 @@ ggplot(proportion, aes(sample = residuals2)) + geom_qq(distribution = qnorm) +
 
 ```
 
-```{r}
-	    #yes		no		total
-#2008 40.80	  1000		1040.8
-#2016 206.19	1000		1206.19
 
-#for 2008:
-#the probability of patients getting opioid:  40.80/1040.8 = 3.92%
-#the probability of patients not getting opioid: 1000/1040.8 = 96.08%
-#the odds of patients getting opioid: 0.0408
-
-#for 2016:
-#the probability of patients getting opioid:  206.19/1206.19 = 17.09%
-#the probability of patients not getting opioid: 1000/1206.19 = 82.91%
-#the odds of patients getting opioid: 0.2061
-
-#the ratio of the odds of 2016 getting opioids to the odds for 2008 getting opioids is: 5.05
-	#for 2016 the odds of getting opioids are:
-		#5.05 times larger (505% higher) than 2008 getting them
-```
 
