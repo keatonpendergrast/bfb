@@ -1,0 +1,459 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+## set libraries needed
+require(tidyverse)
+require(foreign)
+require(funModeling)
+require(Hmisc)
+require(dplyr)
+library(tidyr)
+require(DataExplorer)
+require(readr)
+require(tikzDevice)
+require(usethis)
+library(stringr)
+```
+
+```{r}
+#pull in the datasets from 2006 to 2016
+urlfile="https://media.githubusercontent.com/media/keatonpendergrast/bfb/master/2006.tsv"
+
+six <- read.table(url(urlfile), sep = '\t', header = TRUE)
+
+urlfile="https://media.githubusercontent.com/media/keatonpendergrast/bfb/master/2007.tsv"
+
+seven <- read.table(url(urlfile), sep = '\t', header = TRUE)
+
+urlfile="https://media.githubusercontent.com/media/keatonpendergrast/bfb/master/2008.tsv"
+
+eight <- read.table(url(urlfile), sep = '\t', header = TRUE)
+
+urlfile="https://media.githubusercontent.com/media/keatonpendergrast/bfb/master/2009.tsv"
+
+nine <- read.table(url(urlfile), sep = '\t', header = TRUE)
+
+urlfile="https://media.githubusercontent.com/media/keatonpendergrast/bfb/master/2010.csv"
+
+ten <- read.csv(url(urlfile))
+
+urlfile="https://media.githubusercontent.com/media/keatonpendergrast/bfb/master/2011.csv"
+
+eleven <- read.csv(url(urlfile))
+
+urlfile="https://media.githubusercontent.com/media/keatonpendergrast/bfb/master/2012.csv"
+
+twelve <- read.csv(url(urlfile))
+
+urlfile="https://media.githubusercontent.com/media/keatonpendergrast/bfb/master/2013.csv"
+
+thirteen <- read.csv(url(urlfile))
+
+urlfile="https://media.githubusercontent.com/media/keatonpendergrast/bfb/master/2014.csv"
+
+fourteen <- read.csv(url(urlfile))
+
+urlfile="https://media.githubusercontent.com/media/keatonpendergrast/bfb/master/2015.csv"
+
+fifteen <- read.csv(url(urlfile))
+
+urlfile="https://raw.githubusercontent.com/keatonpendergrast/bfb/master/2016.csv"
+
+sixteen <- read.csv(url(urlfile))
+
+urlfile="https://raw.githubusercontent.com/keatonpendergrast/bfb/master/2016.csv"
+
+sixteen <- read.csv(url(urlfile))
+```
+
+```{r}
+#add years to each dataset and select for the columns of interest
+sixteen$year <- rep(2016,nrow(sixteen))
+sixteen <- sixteen %>% 
+  select(year, AGE, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8)
+
+fifteen$year <- rep(2015,nrow(fifteen))
+fifteen <- fifteen %>% 
+  select(year, AGE, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8)
+
+fourteen$year <- rep(2014,nrow(fourteen))
+fourteen <- fourteen %>% 
+  select(year, AGE, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8)
+
+thirteen$year <- rep(2013,nrow(thirteen))
+thirteen <- thirteen %>% 
+  select(year, AGE, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8)
+
+twelve$year <- rep(2012,nrow(twelve))
+twelve <- twelve %>% 
+  select(year, AGE, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8)
+
+eleven$year <- rep(2011,nrow(eleven))
+eleven <- eleven %>% 
+  select(year, AGE, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8)
+
+ten$year <- rep(2010,nrow(ten))
+ten <- ten %>% 
+  select(year, AGE, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8)
+
+nine$year <- rep(2009,nrow(nine))
+nine <- nine %>% 
+  select(year, AGE, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8)
+
+eight$year <- rep(2008,nrow(eight))
+eight <- eight %>% 
+  select(year, AGE, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8)
+
+seven$year <- rep(2007,nrow(seven))
+seven <- seven %>% 
+  select(year, AGE, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8)
+
+six$year <- rep(2006,nrow(six))
+six <- six %>% 
+  select(year, AGE, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8)
+```
+
+```{r}
+#combine all into one big dataset
+data <- rbind(six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen)
+```
+
+```{r}
+#recode the drugs into names
+  data[ data == 25530 ] <- "PROPOXYPHENE"
+  data[ data == 25530 ] <- "PROPOXYPHENE" 
+  data[ data == 25545 ] <- "PROPOXYPHENE" 
+  data[ data == 89071 ] <- "PROPOXYPHENE" 
+  data[ data == 93411 ] <- "PROPOXYPHENE" 
+  data[ data == 25505 ] <- "PROPOXYPHENE" 
+  data[ data == 25515 ] <- "PROPOXYPHENE" 
+  data[ data == 25520 ] <- "PROPOXYPHENE" 
+  data[ data == 41375 ] <- "PROPOXYPHENE" 
+  data[ data == 25525 ] <- "PROPOXYPHENE" 
+  data[ data == 25510 ] <- "PROPOXYPHENE" 
+  data[ data == 02387 ] <- "REMIFENTANIL" 
+  data[ data == 10187 ] <- "SUFENTANIL" 
+  data[ data == 01187 ] <- "SUFENTANIL" 
+  data[ data == 11121 ] <- "TAPENTADOL" 
+  data[ data == 02348 ] <- "OXYCODONE" 
+  data[ data == 22305 ] <- "OXYCODONE" 
+  data[ data == 22306 ] <- "OXYCODONE" 
+  data[ data == 28272 ] <- "OXYCODONE" 
+  data[ data == 02828 ] <- "OXYCODONE" 
+  data[ data == 22307 ] <- "OXYCODONE" 
+  data[ data == 22308 ] <- "OXYCODONE" 
+  data[ data == 58273 ] <- "OXYCODONE" 
+  data[ data == 00389 ] <- "OXYCODONE" 
+  data[ data == 08246 ] <- "OXYCODONE" 
+  data[ data == 09582 ] <- "OXYCODONE" 
+  data[ data == 12028 ] <- "OXYCODONE" 
+  data[ data == 22303 ] <- "OXYCODONE" 
+  data[ data == 11270 ] <- "OXYMORPHONE" 
+  data[ data == 07701 ] <- "PENTAZOCINE" 
+  data[ data == 13117 ] <- "PENTAZOCINE" 
+  data[ data == 08338 ] <- "PHENEROL" 
+  data[ data == 10426 ] <- "MORPHINE" 
+  data[ data == 19655 ] <- "MORPHINE" 
+  data[ data == 10403 ] <- "MORPHINE" 
+  data[ data == 12008 ] <- "MORPHINE" 
+  data[ data == 19650 ] <- "MORPHINE" 
+  data[ data == 99123 ] <- "MORPHINE" 
+  data[ data == 60990 ] <- "NALBUPHINE" 
+  data[ data == 11194 ] <- "Narcotic_Analgesics" 
+  data[ data == 98067 ] <- "Narcotic_Analgesics" 
+  data[ data == 08202 ] <- "OPIUM" 
+  data[ data == 21865 ] <- "OPIUM" 
+  data[ data == 27380 ] <- "OPIUM" 
+  data[ data == 16190 ] <- "OPIUM" 
+  data[ data == 17255 ] <- "OPIUM" 
+  data[ data == 91084 ] <- "OPIUM" 
+  data[ data == 03064 ] <- "OPIUM" 
+  data[ data == 09969 ] <- "OPIUM" 
+  data[ data == 21860 ] <- "OPIUM" 
+  data[ data == 21870 ] <- "OPIUM" 
+  data[ data == 21875 ] <- "OPIUM" 
+  data[ data == 21880 ] <- "OPIUM" 
+  data[ data == 04589 ] <- "OPIUM" 
+  data[ data == 22850 ] <- "OPIUM"
+  data[ data == 95085 ] <- "MEPERIDINE"
+  data[ data == 17340 ] <- "LEVORPHANOL"
+  data[ data == 17362 ] <- "LEVORPHANOL"
+  data[ data == 08790 ] <- "MEPERIDINE" 
+  data[ data == 02943 ] <- "MEPERIDINE" 
+  data[ data == 02955 ] <- "MEPERIDINE" 
+  data[ data == 95085 ] <- "MEPERIDINE" 
+  data[ data == 00200 ] <- "MEPERIDINE" 
+  data[ data == 08785 ] <- "MEPERIDINE" 
+  data[ data == 12319 ] <- "MEPERIDINE" 
+  data[ data == 18760 ] <- "MEPERIDINE" 
+  data[ data == 96045 ] <- "MEPERIDINE" 
+  data[ data == 01098 ] <- "MEPERIDINE" 
+  data[ data == 04534 ] <- "MEPERIDINE" 
+  data[ data == 08093 ] <- "MEPERIDINE" 
+  data[ data == 18755 ] <- "MEPERIDINE" 
+  data[ data == 96012 ] <- "MEPERIDINE" 
+  data[ data == 10130 ] <- "METHADONE" 
+  data[ data == 18985 ] <- "METHADONE" 
+  data[ data == 91012 ] <- "DEZOCINE" 
+  data[ data == 91071 ] <- "DEZOCINE" 
+  data[ data == 10715 ] <- "DIHYDROCODEINE" 
+  data[ data == 00044 ] <- "DIHYDROCODEINE" 
+  data[ data == 03078 ] <- "DIHYDROCODEINE" 
+  data[ data == 07467 ] <- "DIHYDROCODEINE" 
+  data[ data == 11067 ] <- "DIHYDROCODEINE" 
+  data[ data == 11184 ] <- "DIHYDROCODEINE"
+  data[ data == 93351 ] <- "DIHYDROCODEINE"
+  data[ data == 30340 ] <- "DIHYDROCODEINE"
+  data[ data == 10128 ] <- "DIHYDROCODEINE"
+  data[ data == 40415 ] <- "DIHYDROCODEINE"
+  data[ data == 12061 ] <- "DIHYDROCODEINE" 
+  data[ data == 09236 ] <- "DIHYDROCODEINE"
+  data[ data == 92082 ] <- "DIHYDROCODEINE"
+  data[ data == 09574 ] <- "DIHYDROCODEINE" 
+  data[ data == 32225 ] <- "DIHYDROCODEINE" 
+  data[ data == 27060 ] <- "DIHYDROCODEINE" 
+  data[ data == 12173 ] <- "DIHYDROCODEINE" 
+  data[ data == 14890 ] <- "DIHYDROCODEINE" 
+  data[ data == 15002 ] <- "DIHYDROCODEINE" 
+  data[ data == 07225 ] <- "DIHYDROCODEINE" 
+  data[ data == 15650 ] <- "FENTANYL" 
+  data[ data == 89034 ] <- "FENTANYL" 
+  data[ data == 02067 ] <- "FENTANYL" 
+  data[ data == 03307 ] <- "FENTANYL" 
+  data[ data == 07197 ] <- "FENTANYL" 
+  data[ data == 09508 ] <- "FENTANYL" 
+  data[ data == 10442 ] <- "FENTANYL" 
+  data[ data == 12243 ] <- "FENTANYL" 
+  data[ data == 29645 ] <- "FENTANYL" 
+  data[ data == 60565 ] <- "FENTANYL" 
+  data[ data == 92024 ] <- "FENTANYL" 
+  data[ data == 94188 ] <- "FENTANYL" 
+  data[ data == 14770 ] <- "HYDROCODONE" 
+  data[ data == 92041 ] <- "HYDROCODONE" 
+  data[ data == 92042 ] <- "HYDROCODONE" 
+  data[ data == 42245 ] <- "HYDROCODONE" 
+  data[ data == 06282 ] <- "HYDROCODONE" 
+  data[ data == 00251 ] <- "HYDROCODONE" 
+  data[ data == 01268 ] <- "HYDROCODONE" 
+  data[ data == 01995 ] <- "HYDROCODONE" 
+  data[ data == 02045 ] <- "HYDROCODONE" 
+  data[ data == 02082 ] <- "HYDROCODONE" 
+  data[ data == 02132 ] <- "HYDROCODONE" 
+  data[ data == 02314 ] <- "HYDROCODONE" 
+  data[ data == 03518 ] <- "HYDROCODONE" 
+  data[ data == 06059 ] <- "HYDROCODONE" 
+  data[ data == 07064 ] <- "HYDROCODONE" 
+  data[ data == 08354 ] <- "HYDROCODONE" 
+  data[ data == 10105 ] <- "HYDROCODONE" 
+  data[ data == 11162 ] <- "HYDROCODONE" 
+  data[ data == 12194 ] <- "HYDROCODONE" 
+  data[ data == 14917 ] <- "HYDROCODONE" 
+  data[ data == 34110 ] <- "HYDROCODONE" 
+  data[ data == 40860 ] <- "HYDROCODONE" 
+  data[ data == 60340 ] <- "HYDROCODONE" 
+  data[ data == 02045 ] <- "HYDROCODONE"
+  data[ data == 89039 ] <- "HYDROCODONE" 
+  data[ data == 92180 ] <- "HYDROCODONE" 
+  data[ data == 93077 ] <- "HYDROCODONE" 
+  data[ data == 93089 ] <- "HYDROCODONE" 
+  data[ data == 96028 ] <- "HYDROCODONE" 
+  data[ data == 96047 ] <- "HYDROCODONE" 
+  data[ data == 98036 ] <- "HYDROCODONE" 
+  data[ data == 98168 ] <- "HYDROCODONE" 
+  data[ data == 09516 ] <- "HYDROMORPHONE" 
+  data[ data == 09595 ] <- "HYDROMORPHONE" 
+  data[ data == 09600 ] <- "HYDROMORPHONE" 
+  data[ data == 09641 ] <- "HYDROMORPHONE" 
+  data[ data == 11229 ] <- "HYDROMORPHONE" 
+  data[ data == 15005 ] <- "HYDROMORPHONE" 
+  data[ data == 08220 ] <- "HYDROMORPHONE" 
+  data[ data == 27315 ] <- "CODEINE" 
+  data[ data == 22415 ] <- "CODEINE" 
+  data[ data == 11225 ] <- "CODEINE" 
+  data[ data == 08910 ] <- "OPIUM" 
+  data[ data == 05054 ] <- "BUPRENORPHINE"  
+  data[ data == 10386 ] <- "BUPRENORPHINE"
+  data[ data == 60265 ] <- "BUPRENORPHINE" 
+  data[ data == 10166 ] <- "BUPRENORPHINE" 
+  data[ data == 13141 ] <- "BUPRENORPHINE" 
+  data[ data == 05103 ] <- "CODEINE" 
+  data[ data == 01021 ] <- "BUTORPHANOL" 
+  data[ data == 29285 ] <- "BUTORPHANOL" 
+  data[ data == 40765 ] <- "CODEINE" 
+  data[ data == 11689 ] <- "CODEINE" 
+  data[ data == 14014 ] <- "CODEINE" 
+  data[ data == 95178 ] <- "CODEINE" 
+  data[ data == 13152 ] <- "CODEINE" 
+  data[ data == 24143 ] <- "CODEINE" 
+  data[ data == 07155 ] <- "CODEINE" 
+  data[ data == 07156 ] <- "CODEINE" 
+  data[ data == 07157 ] <- "CODEINE" 
+  data[ data == 07158 ] <- "CODEINE" 
+  data[ data == 07365 ] <- "CODEINE" 
+  data[ data == 25880 ] <- "CODEINE" 
+  data[ data == 01853 ] <- "CODEINE" 
+  data[ data == 28180 ] <- "CODEINE" 
+  data[ data == 41260 ] <- "CODEINE" 
+  data[ data == 03520 ] <- "CODEINE" 
+  data[ data == 00250 ] <- "CODEINE" 
+  data[ data == 00265 ] <- "CODEINE" 
+  data[ data == 00270 ] <- "CODEINE" 
+  data[ data == 00275 ] <- "CODEINE" 
+  data[ data == 00280 ] <- "CODEINE" 
+  data[ data == 01758 ] <- "CODEINE" 
+  data[ data == 02340 ] <- "CODEINE" 
+  data[ data == 02345 ] <- "CODEINE" 
+  data[ data == 05151 ] <- "CODEINE" 
+  data[ data == 05640 ] <- "CODEINE" 
+  data[ data == 07080 ] <- "CODEINE" 
+  data[ data == 07165 ] <- "CODEINE" 
+  data[ data == 07618 ] <- "CODEINE" 
+  data[ data == 09538 ] <- "CODEINE" 
+  data[ data == 10457 ] <- "CODEINE" 
+  data[ data == 11268 ] <- "CODEINE" 
+  data[ data == 23665 ] <- "CODEINE" 
+  data[ data == 23670 ] <- "CODEINE" 
+  data[ data == 23675 ] <- "CODEINE" 
+  data[ data == 23680 ] <- "CODEINE" 
+  data[ data == 23635 ] <- "CODEINE" 
+  data[ data == 28215 ] <- "CODEINE" 
+  data[ data == 32910 ] <- "CODEINE" 
+  data[ data == 32915 ] <- "CODEINE" 
+  data[ data == 32920 ] <- "CODEINE" 
+  data[ data == 32930 ] <- "CODEINE" 
+  data[ data == 32935 ] <- "CODEINE" 
+  data[ data == 41245 ] <- "CODEINE" 
+  data[ data == 91010 ] <- "CODEINE" 
+  data[ data == 10128 ] <- "DIHYDROCODEINE" 
+  data[ data == 40415 ] <- "DIHYDROCODEINE" 
+  data[ data == 02730 ] <- "CODEINES" 
+  data[ data == 02735 ] <- "CODEINES" 
+  data[ data == 02740 ] <- "CODEINE"
+  data[ data == 04770 ] <- "CODEINE" 
+  data[ data == 12570 ] <- "CODEINE" 
+  data[ data == 01028 ] <- "CODEINE" 
+  data[ data == 07180 ] <- "CODEINE" 
+  data[ data == 07185 ] <- "CODEINE" 
+  data[ data == 07190 ] <- "CODEINE" 
+  data[ data == 12072 ] <- "CODEINE" 
+  data[ data == 92039 ] <- "CODEINE" 
+  data[ data == 23790 ] <- "CODEINE" 
+  data[ data == 25430 ] <- "CODEINE" 
+  data[ data == 12071 ] <- "CODEINE" 
+  data[ data == 13028 ] <- "CODEINE" 
+  data[ data == 13838 ] <- "CODEINE" 
+  data[ data == 13890 ] <- "CODEINE" 
+  data[ data == 26835 ] <- "CODEINE" 
+  data[ data == 91027 ] <- "CODEINE" 
+  data[ data == 32845 ] <- "CODEINE" 
+  data[ data == 23798 ] <- "CODEINE" 
+  data[ data == 25415 ] <- "CODEINE" 
+  data[ data == 25432 ] <- "CODEINE" 
+  data[ data == 25359 ] <- "CODEINE" 
+  data[ data == 99072 ] <- "CODEINE" 
+  data[ data == 91012 ] <- "DEZOCINE" 
+  data[ data == 91071 ] <- "DEZOCINE" 
+  data[ data == 00866 ] <- "ALFENTANIL" 
+  data[ data == 96145 ] <- "ALFENTANIL" 
+  data[ data == 21095 ] <- "ALPHAPRODINE" 
+  data[ data == 00197 ] <- "DEXTROPROPOXYPHENE" 
+  data[ data == 12046 ] <- "OXYCODONE" 
+  data[ data == 15062 ] <- "OXYCODONE" 
+  data[ data == 22305 ] <- "OXYCODONE" 
+  data[ data == 23385 ] <- "OXYCODONE" 
+  data[ data == 26958 ] <- "OXYCODONE" 
+  data[ data == 32945 ] <- "OXYCODONE" 
+  data[ data == 99114 ] <- "OXYCODONE" 
+  data[ data == 22308 ] <- "OXYCODONE" 
+  data[ data == 12028 ] <- "OXYCODONE" 
+  data[ data == 22303 ] <- "OXYCODONE" 
+  data[ data == 96109 ] <- "OXYCODONE" 
+  data[ data == 97181 ] <- "OXYCODONE" 
+  data[ data == 07701 ] <- "PENTAZOCINE" 
+  data[ data == 23285 ] <- "PENTAZOCINE" 
+  data[ data == 30535 ] <- "PENTAZOCINE" 
+  data[ data == 30540 ] <- "PENTAZOCINE" 
+  data[ data == 30513 ] <- "PENTAZOCINE"  
+  data[ data == 03245 ] <- "OPIUM" 
+  data[ data == 21865 ] <- "OPIUM" 
+  data[ data == 03276 ] <- "BUPRENORPHINE" 
+  data[ data == 10166 ] <- "BUPRENORPHINE" 
+  data[ data == 13141 ] <- "BUPRENORPHINE" 
+  data[ data == 15650 ] <- "FENTANYL" 
+  data[ data == 89034 ] <- "FENTANYL" 
+  data[ data == 09737 ] <- "HYDROCODONE" 
+  data[ data == 09751 ] <- "HYDROCODONE" 
+  data[ data == 10223 ] <- "HYDROCODONE" 
+  data[ data == 98043 ] <- "HYDROCODONE" 
+  data[ data == 00389 ] <- "OXYCODONE" 
+  data[ data == 05040 ] <- "OXYCODONE" 
+  data[ data == 01098 ] <- "MEPERIDINE" 
+  data[ data == 04534 ] <- "MEPERIDINE" 
+  data[ data == 08093 ] <- "MEPERIDINE"
+  data[ data == 18755 ] <- "MEPERIDINE" 
+  data[ data == 96012 ] <- "MEPERIDINE"
+  data[ data == 04538 ] <- "PENTAZOCINE" 
+  data[ data == 13117 ] <- "PENTAZOCINE"
+  data[ data == 09516 ] <- "HYDROMORPHONE"
+```
+
+```{r}
+#recode the reasons for visits into categories
+data[ data == "11000" ] <- "Anxiety and Nervousness"
+data[ data == "11005" ] <- "Fears and Phobias"
+data[ data == "11100" ] <- "Depression"
+data[ data == "11150" ] <- "Anger"
+data[ data == "11200" ] <- "Problems with Identity/Self-esteem"
+data[ data == "11250" ] <- "Restlessness"
+data[ data == "11300" ] <- "Behavioral Disturbances"
+data[ data == "11301" ] <- "Antisocial Behavior"
+data[ data == "11302" ] <- "Hostile Behavior"
+data[ data == "11303" ] <- "Hysterical Behavior"
+data[ data == "11304" ] <- "Temper Problems"
+data[ data == "11305" ] <- "Obsessions and Compulsions"
+data[ data == "11350" ] <- "Disturbances of Sleep"
+data[ data == "11351" ] <- "Insomnia"
+data[ data == "11352" ] <- "Hypersomnia"
+data[ data == "11353" ] <- "Nightmares"
+data[ data == "11354" ] <- "Sleepwalking"
+data[ data == "11355" ] <- "Sleep Apnea"
+data[ data == "11450" ] <- "Alcohol-related Problems"
+data[ data == "11500" ] <- "Abnormal Drug Usage"
+data[ data == "11501" ] <- "Substance Abuse"
+data[ data == "11550" ] <- "Delusions or Hallucinations"
+data[ data == "11650" ] <- "Other"
+```
+
+```{r}
+#everyone on the opioid-controlled substances
+data_1 <- data %>%
+  select(year, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
+  unite(MED, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
+   mutate(rn = row_number()) %>%
+   separate_rows(MED) %>%
+   filter(MED %in% c("OXYCODONE", "PROPOXYPHENE", "REMIFENTANIL", "SUFENTANIL", "TAPENTADOL", "OXYMORPHONE", "PHENEROL", "MORPHINE", "NALBUPHINE", "Narcotic_Analgesics", "LEVORPHANOL", "MEPERIDINE", "METHADONE", "DIHYDROCODEINE", "FENTANYL", "HYDROCODONE", "HYDROMORPHONE", "OPIUM", "BUPRENORPHINE", "BUTORPHANOL", "CODEINE", "PHENYLPROPANOLAMINE", "DEZOCINE", "ALFENTANIL", "ALPHAPRODINE", "DEXTROPROPOXYPHENE", "", "PENTAZOCINE")) %>%
+   group_by(rn, year) %>%
+   summarise(PATWT = first(PATWT), MED = toString(unique(MED))) %>%
+   select(-rn)
+
+  data_1[ data_1 == "MORPHINE, OXYCODONE" ] <- "OXYCODONE, MORPHINE"
+  data_1[ data_1 == "OPIUM, MORPHINE" ] <- "MORPHINE, OPIUM" 
+  data_1[ data_1 == "OPIUM, OXYCODONE" ] <- "OXYCODONE, OPIUM"
+  data_1[ data_1 == "PROPOXYPHENE, OXYCODONE" ] <- "OXYCODONE, PROPOXYPHENE"
+  data_1$PATWT <- as.numeric(as.character(data_1$PATWT))  
+  
+data_1 <- data_1 %>%
+  group_by(year, MED) %>%
+  summarise(sum = sum(PATWT, na.rm=T))
+
+ggplot(data_1, aes(year, sum, colour = MED)) + 
+  geom_line() +
+  theme(legend.position = "none")
+```
+
+```{r}
+
+```
