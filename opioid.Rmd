@@ -835,6 +835,7 @@ yearsall2 <- yearsall
   yearsall3[ yearsall3 == "Morphine, Oxycodone" ] <- "Oxycodone, Morphine"
   yearsall3[ yearsall3 == "Opium, Morphine" ] <- "Morphine, Opium" 
   yearsall3[ yearsall3 == "Opium, Oxycodone" ] <- "Oxycodone, Opium"
+  yearsall3[ yearsall3 == "Propoxyphene, Oxycodone" ] <- "Oxycodone, Propoxyphene"
   
 yearsall3$PATWT <- as.numeric(as.character(yearsall3$PATWT))  
 
