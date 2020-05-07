@@ -429,6 +429,8 @@ data[ data == "11650" ] <- "Other"
 
 ```{r}
 #everyone on the opioid-controlled substances
+data$PATWT <- as.numeric(as.character(data$PATWT)) 
+
 data_1 <- data %>%
   select(year, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
   unite(MED, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
@@ -443,17 +445,108 @@ data_1 <- data %>%
   data_1[ data_1 == "OPIUM, MORPHINE" ] <- "MORPHINE, OPIUM" 
   data_1[ data_1 == "OPIUM, OXYCODONE" ] <- "OXYCODONE, OPIUM"
   data_1[ data_1 == "PROPOXYPHENE, OXYCODONE" ] <- "OXYCODONE, PROPOXYPHENE"
-  data_1$PATWT <- as.numeric(as.character(data_1$PATWT))  
-  
-data_1 <- data_1 %>%
+```
+
+```{r}
+# the opioid rate PER year amongst ALL patients BY drug name
+data_2 <- data_1 %>%
   group_by(year, MED) %>%
   summarise(sum = sum(PATWT, na.rm=T))
 
-ggplot(data_1, aes(year, sum, colour = MED)) + 
+data_2$sum <- as.numeric(as.character(data_2$sum)) 
+
+close0 <- data_2 %>%
+  filter(year == 2006) %>%
+  mutate(prop = sum/(sum(six$PATWT))*100)
+close11 <- data_2 %>%
+  filter(year == 2007) %>%
+  mutate(prop = sum/(sum(seven$PATWT))*100)
+close22 <- data_2 %>%
+  filter(year == 2008) %>%
+  mutate(prop = sum/(sum(eight$PATWT))*100)
+close33 <- data_2 %>%
+  filter(year == 2009) %>%
+  mutate(prop = sum/(sum(nine$PATWT))*100)
+close44 <- data_2 %>%
+  filter(year == 2010) %>%
+  mutate(prop = sum/(sum(ten$PATWT))*100)
+close55 <- data_2 %>%
+  filter(year == 2011) %>%
+  mutate(prop = sum/(sum(eleven$PATWT))*100)
+close66 <- data_2 %>%
+  filter(year == 2012) %>%
+  mutate(prop = sum/(sum(twelve$PATWT))*100)
+close77 <- data_2 %>%
+  filter(year == 2013) %>%
+  mutate(prop = sum/(sum(thirteen$PATWT))*100)
+close88 <- data_2 %>%
+  filter(year == 2014) %>%
+  mutate(prop = sum/(sum(fourteen$PATWT))*100)
+close99 <- data_2 %>%
+  filter(year == 2015) %>%
+  mutate(prop = sum/(sum(fifteen$PATWT))*100)
+close100 <- data_2 %>%
+  filter(year == 2016) %>%
+  mutate(prop = sum/(sum(sixteen$PATWT))*100)
+
+data_2summary <- rbind(close0, close11, close22, close33, close44, close55, close66, close77, close88, close99, close100) %>%
+  select(year, MED, prop)
+
+write.csv(data_2summary, file = "data_2summary.csv")
+
+ggplot(data_2summary, aes(year, prop, colour = MED)) + 
   geom_line() +
   theme(legend.position = "none")
 ```
 
 ```{r}
+data_3 <- data_1 %>%
+  group_by(year) %>%
+  summarise(sum = sum(PATWT, na.rm=T))
 
+data_3$sum <- as.numeric(as.character(data_3$sum)) 
+
+close0 <- data_3 %>%
+  filter(year == 2006) %>%
+  mutate(prop = sum/(sum(six$PATWT))*100)
+close11 <- data_3 %>%
+  filter(year == 2007) %>%
+  mutate(prop = sum/(sum(seven$PATWT))*100)
+close22 <- data_3 %>%
+  filter(year == 2008) %>%
+  mutate(prop = sum/(sum(eight$PATWT))*100)
+close33 <- data_3 %>%
+  filter(year == 2009) %>%
+  mutate(prop = sum/(sum(nine$PATWT))*100)
+close44 <- data_3 %>%
+  filter(year == 2010) %>%
+  mutate(prop = sum/(sum(ten$PATWT))*100)
+close55 <- data_3 %>%
+  filter(year == 2011) %>%
+  mutate(prop = sum/(sum(eleven$PATWT))*100)
+close66 <- data_3 %>%
+  filter(year == 2012) %>%
+  mutate(prop = sum/(sum(twelve$PATWT))*100)
+close77 <- data_3 %>%
+  filter(year == 2013) %>%
+  mutate(prop = sum/(sum(thirteen$PATWT))*100)
+close88 <- data_3 %>%
+  filter(year == 2014) %>%
+  mutate(prop = sum/(sum(fourteen$PATWT))*100)
+close99 <- data_3 %>%
+  filter(year == 2015) %>%
+  mutate(prop = sum/(sum(fifteen$PATWT))*100)
+close100 <- data_3 %>%
+  filter(year == 2016) %>%
+  mutate(prop = sum/(sum(sixteen$PATWT))*100)
+
+data_3summary <- rbind(close0, close11, close22, close33, close44, close55, close66, close77, close88, close99, close100) %>%
+  select(year, prop)
+
+write.csv(data_3summary, file = "data_3summary.csv")
+
+ggplot(data_3summary, aes(year, prop)) + 
+  geom_line() +
+  theme(legend.position = "none")
 ```
+
