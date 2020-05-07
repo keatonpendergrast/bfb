@@ -16,8 +16,6 @@ require(DataExplorer)
 require(readr)
 require(tikzDevice)
 require(usethis)
-
-usethis::git_sitrep()
 ```
 
 ```{r}
