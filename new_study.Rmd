@@ -402,28 +402,28 @@ data <- rbind(six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, 
 
 ```{r}
 #recode the reasons for visits into categories
-data[ data == "11000" ] <- "Anxiety and Nervousness"
-data[ data == "11005" ] <- "Fears and Phobias"
+data[ data == "11000" ] <- "Anxiety_Nervousness"
+data[ data == "11005" ] <- "Fears_Phobias"
 data[ data == "11100" ] <- "Depression"
 data[ data == "11150" ] <- "Anger"
-data[ data == "11200" ] <- "Problems with Identity/Self-esteem"
+data[ data == "11200" ] <- "Problems_Identity_Self-esteem"
 data[ data == "11250" ] <- "Restlessness"
-data[ data == "11300" ] <- "Behavioral Disturbances"
-data[ data == "11301" ] <- "Antisocial Behavior"
-data[ data == "11302" ] <- "Hostile Behavior"
-data[ data == "11303" ] <- "Hysterical Behavior"
-data[ data == "11304" ] <- "Temper Problems"
-data[ data == "11305" ] <- "Obsessions and Compulsions"
-data[ data == "11350" ] <- "Disturbances of Sleep"
+data[ data == "11300" ] <- "Behavioral_Disturbances"
+data[ data == "11301" ] <- "Antisocial_Behavior"
+data[ data == "11302" ] <- "Hostile_Behavior"
+data[ data == "11303" ] <- "Hysterical_Behavior"
+data[ data == "11304" ] <- "Temper_Problems"
+data[ data == "11305" ] <- "Obsessions_Compulsions"
+data[ data == "11350" ] <- "Disturbances_of_Sleep"
 data[ data == "11351" ] <- "Insomnia"
 data[ data == "11352" ] <- "Hypersomnia"
 data[ data == "11353" ] <- "Nightmares"
 data[ data == "11354" ] <- "Sleepwalking"
-data[ data == "11355" ] <- "Sleep Apnea"
-data[ data == "11450" ] <- "Alcohol-related Problems"
-data[ data == "11500" ] <- "Abnormal Drug Usage"
-data[ data == "11501" ] <- "Substance Abuse"
-data[ data == "11550" ] <- "Delusions or Hallucinations"
+data[ data == "11355" ] <- "Sleep_Apnea"
+data[ data == "11450" ] <- "Alcohol-related_Problems"
+data[ data == "11500" ] <- "Abnormal_Drug_Usage"
+data[ data == "11501" ] <- "Substance_Abuse"
+data[ data == "11550" ] <- "Delusions_or_Hallucinations"
 data[ data == "11650" ] <- "Other"
 ```
 
@@ -441,10 +441,54 @@ data_1 <- data %>%
    summarise(PATWT = first(PATWT), MED = toString(unique(MED))) %>%
    select(-rn)
 
-  data_1[ data_1 == "MORPHINE, OXYCODONE" ] <- "OXYCODONE, MORPHINE"
-  data_1[ data_1 == "OPIUM, MORPHINE" ] <- "MORPHINE, OPIUM" 
-  data_1[ data_1 == "OPIUM, OXYCODONE" ] <- "OXYCODONE, OPIUM"
-  data_1[ data_1 == "PROPOXYPHENE, OXYCODONE" ] <- "OXYCODONE, PROPOXYPHENE"
+  #remove blank entries
+data_1[Reduce(`&`, lapply(data_1, function(x) !(is.na(x)|x==""))),]
+
+data_0 <- data_1 %>%
+  group_by(year) %>%
+  summarise(sum = sum(PATWT, na.rm=T))
+
+data_0$sum <- as.numeric(as.character(data_0$sum)) 
+
+close0 <- data_0 %>%
+  filter(year == 2006) %>%
+  mutate(prop = sum/(sum(six$PATWT))*100)
+close11 <- data_0 %>%
+  filter(year == 2007) %>%
+  mutate(prop = sum/(sum(seven$PATWT))*100)
+close22 <- data_0 %>%
+  filter(year == 2008) %>%
+  mutate(prop = sum/(sum(eight$PATWT))*100)
+close33 <- data_0 %>%
+  filter(year == 2009) %>%
+  mutate(prop = sum/(sum(nine$PATWT))*100)
+close44 <- data_0 %>%
+  filter(year == 2010) %>%
+  mutate(prop = sum/(sum(ten$PATWT))*100)
+close55 <- data_0 %>%
+  filter(year == 2011) %>%
+  mutate(prop = sum/(sum(eleven$PATWT))*100)
+close66 <- data_0 %>%
+  filter(year == 2012) %>%
+  mutate(prop = sum/(sum(twelve$PATWT))*100)
+close77 <- data_0 %>%
+  filter(year == 2013) %>%
+  mutate(prop = sum/(sum(thirteen$PATWT))*100)
+close88 <- data_0 %>%
+  filter(year == 2014) %>%
+  mutate(prop = sum/(sum(fourteen$PATWT))*100)
+close99 <- data_0 %>%
+  filter(year == 2015) %>%
+  mutate(prop = sum/(sum(fifteen$PATWT))*100)
+close100 <- data_0 %>%
+  filter(year == 2016) %>%
+  mutate(prop = sum/(sum(sixteen$PATWT))*100)
+
+data_0summary <- rbind(close0, close11, close22, close33, close44, close55, close66, close77, close88, close99, close100) %>%
+  select(year, prop)
+  
+write.csv(data_0summary, file = "data_0summary.csv")
+
 ```
 
 ```{r}
@@ -490,18 +534,18 @@ close100 <- data_2 %>%
   mutate(prop = sum/(sum(sixteen$PATWT))*100)
 
 data_2summary <- rbind(close0, close11, close22, close33, close44, close55, close66, close77, close88, close99, close100) %>%
-  select(year, MED, prop)
+  select(MED, year, prop)
 
 write.csv(data_2summary, file = "data_2summary.csv")
 
 ggplot(data_2summary, aes(year, prop, colour = MED)) + 
-  geom_line() +
-  theme(legend.position = "none")
+  geom_line()
 ```
 
 ```{r}
+# the opioid rate PER year amongst ALL patients
 data_3 <- data_1 %>%
-  group_by(year) %>%
+  group_by(year, MED) %>%
   summarise(sum = sum(PATWT, na.rm=T))
 
 data_3$sum <- as.numeric(as.character(data_3$sum)) 
@@ -547,6 +591,203 @@ write.csv(data_3summary, file = "data_3summary.csv")
 
 ggplot(data_3summary, aes(year, prop)) + 
   geom_line() +
+  theme(legend.position = "none")
+```
+
+```{r}
+# the opioid rate PER year amongst BEHAVIOURAL health patients by MED
+data_4 <- data %>%
+  select(year, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
+  unite(RFV, RFV1, RFV2, RFV3) %>%
+   mutate(rn = row_number()) %>%
+   separate_rows(RFV) %>%
+   filter(RFV %in% c("Anxiety_Nervousness", "Fears_Phobias", "Depression", "Anger", "Problems_Identity_Self-esteem", "Restlessness", "Behavioral_Disturbances", "Antisocial_Behavior", "Hostile_Behavior", "Narcotic_Analgesics", "Hysterical_Behavior", "Temper_Problems", "Obsessions_Compulsions", "Disturbances_of_Sleep", "Insomnia", "Hypersomnia", "Nightmares", "Sleepwalking", "Sleep_Apnea", "Alcohol-related_Problems", "Abnormal_Drug_Usage", "Substance_Abuse", "Delusions_or_Hallucinations", "Other"))
+
+data_7 <- data_4 %>%
+   select(year, PATWT, RFV, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
+  unite(MED, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
+   mutate(rn = row_number()) %>%
+   separate_rows(MED) %>%
+   filter(MED %in% c("OXYCODONE", "PROPOXYPHENE", "REMIFENTANIL", "SUFENTANIL", "TAPENTADOL", "OXYMORPHONE", "PHENEROL", "MORPHINE", "NALBUPHINE", "Narcotic_Analgesics", "LEVORPHANOL", "MEPERIDINE", "METHADONE", "DIHYDROCODEINE", "FENTANYL", "HYDROCODONE", "HYDROMORPHONE", "OPIUM", "BUPRENORPHINE", "BUTORPHANOL", "CODEINE", "PHENYLPROPANOLAMINE", "DEZOCINE", "ALFENTANIL", "ALPHAPRODINE", "DEXTROPROPOXYPHENE", "", "PENTAZOCINE")) %>%
+   group_by(rn, year, RFV) %>%
+   summarise(PATWT = first(PATWT), MED = toString(unique(MED))) %>%
+   select(-rn)
+
+data_7 <- data_7[!(data_7$MED == ""), ]
+
+data_8 <- data_7 %>%
+  group_by(year, MED) %>%
+  summarise(sum = sum(PATWT))
+
+data_8$sum <- as.numeric(as.character(data_8$sum)) 
+
+close <- data_8 %>%
+  filter(year == 2006) %>%
+  mutate(prop = sum/(sum(six$PATWT))*100)
+close1 <- data_8 %>%
+  filter(year == 2007) %>%
+  mutate(prop = sum/(sum(seven$PATWT))*100)
+close2 <- data_8 %>%
+  filter(year == 2008) %>%
+  mutate(prop = sum/(sum(eight$PATWT))*100)
+close3 <- data_8 %>%
+  filter(year == 2009) %>%
+  mutate(prop = sum/(sum(nine$PATWT))*100)
+close4 <- data_8 %>%
+  filter(year == 2010) %>%
+  mutate(prop = sum/(sum(ten$PATWT))*100)
+close5 <- data_8 %>%
+  filter(year == 2011) %>%
+  mutate(prop = sum/(sum(eleven$PATWT))*100)
+close6 <- data_8 %>%
+  filter(year == 2012) %>%
+  mutate(prop = sum/(sum(twelve$PATWT))*100)
+close7 <- data_8 %>%
+  filter(year == 2013) %>%
+  mutate(prop = sum/(sum(thirteen$PATWT))*100)
+close8 <- data_8 %>%
+  filter(year == 2014) %>%
+  mutate(prop = sum/(sum(fourteen$PATWT))*100)
+close9 <- data_8 %>%
+  filter(year == 2015) %>%
+  mutate(prop = sum/(sum(fifteen$PATWT))*100)
+close10 <- data_8 %>%
+  filter(year == 2016) %>%
+  mutate(prop = sum/(sum(sixteen$PATWT))*100)
+
+data_8summary <- rbind(close, close1, close2, close3, close4, close5, close6, close7, close8, close9, close10) %>%
+  select(year, prop, MED)
+
+write.csv(data_8summary, file = "data_8summary.csv")
+
+ggplot(data_8summary, aes(year, prop, colour = MED)) + 
+  geom_line() +
+  theme(legend.position = "none")
+```
+
+```{r}
+# the overall opioid rate PER year amongst behavioural health patients ONLY
+data_6 <- data_7 %>%
+  select(year, PATWT) %>%
+  group_by(year) %>%
+  summarise(sum = sum(PATWT, na.rm=T))
+
+closea <- data_6 %>%
+  filter(year == 2006) %>%
+  mutate(prop = sum/(sum(six$PATWT))*100)
+closeb <- data_6 %>%
+  filter(year == 2007) %>%
+  mutate(prop = sum/(sum(seven$PATWT))*100)
+closec <- data_6 %>%
+  filter(year == 2008) %>%
+  mutate(prop = sum/(sum(eight$PATWT))*100)
+closed <- data_6 %>%
+  filter(year == 2009) %>%
+  mutate(prop = sum/(sum(nine$PATWT))*100)
+closee <- data_6 %>%
+  filter(year == 2010) %>%
+  mutate(prop = sum/(sum(ten$PATWT))*100)
+closef <- data_6 %>%
+  filter(year == 2011) %>%
+  mutate(prop = sum/(sum(eleven$PATWT))*100)
+closeg<- data_6 %>%
+  filter(year == 2012) %>%
+  mutate(prop = sum/(sum(twelve$PATWT))*100)
+closeh <- data_6 %>%
+  filter(year == 2013) %>%
+  mutate(prop = sum/(sum(thirteen$PATWT))*100)
+closei <- data_6 %>%
+  filter(year == 2014) %>%
+  mutate(prop = sum/(sum(fourteen$PATWT))*100)
+closej <- data_6 %>%
+  filter(year == 2015) %>%
+  mutate(prop = sum/(sum(fifteen$PATWT))*100)
+closek <- data_6 %>%
+  filter(year == 2016) %>%
+  mutate(prop = sum/(sum(sixteen$PATWT))*100)
+
+data_6summary <- rbind(closea, closeb, closec, closed, closee, closef, closeg, closeh, closei, closej, closek) %>%
+  select(year, prop)
+
+data_6summary$prop <- as.numeric(as.character(data_6summary$prop)) 
+
+write.csv(data_6summary, file = "data_6summary.csv")
+
+scatter.smooth(x=data_6summary$year, y=data_6summary$prop) +
+  title(main="Opioid Prescriptions Per Capita")
+```
+
+```{r}
+data_41 <- data %>%
+  select(year, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
+  unite(RFV, RFV1, RFV2, RFV3) %>%
+   mutate(rn = row_number()) %>%
+   separate_rows(RFV) %>%
+   filter(RFV %in% c("Anxiety_Nervousness", "Fears_Phobias", "Depression", "Anger", "Problems_Identity_Self-esteem", "Restlessness", "Behavioral_Disturbances", "Antisocial_Behavior", "Hostile_Behavior", "Narcotic_Analgesics", "Hysterical_Behavior", "Temper_Problems", "Obsessions_Compulsions", "Disturbances_of_Sleep", "Insomnia", "Hypersomnia", "Nightmares", "Sleepwalking", "Sleep_Apnea", "Alcohol-related_Problems", "Abnormal_Drug_Usage", "Substance_Abuse", "Delusions_or_Hallucinations", "Other"))
+
+data_71 <- data_41 %>%
+   select(year, PATWT, RFV, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
+  unite(MED, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
+   mutate(rn = row_number()) %>%
+   separate_rows(MED) %>%
+   filter(MED %in% c("OXYCODONE", "PROPOXYPHENE", "REMIFENTANIL", "SUFENTANIL", "TAPENTADOL", "OXYMORPHONE", "PHENEROL", "MORPHINE", "NALBUPHINE", "Narcotic_Analgesics", "LEVORPHANOL", "MEPERIDINE", "METHADONE", "DIHYDROCODEINE", "FENTANYL", "HYDROCODONE", "HYDROMORPHONE", "OPIUM", "BUPRENORPHINE", "BUTORPHANOL", "CODEINE", "PHENYLPROPANOLAMINE", "DEZOCINE", "ALFENTANIL", "ALPHAPRODINE", "DEXTROPROPOXYPHENE", "", "PENTAZOCINE")) %>%
+   group_by(rn, year, RFV) %>%
+   summarise(PATWT = first(PATWT), MED = toString(unique(MED))) %>%
+   select(-rn)
+
+data_71 <- data_71[!(data_71$MED == ""), ]
+
+data_81 <- data_71 %>%
+  group_by(year, MED, RFV) %>%
+  summarise(sum = sum(PATWT))
+
+data_81$sum <- as.numeric(as.character(data_81$sum)) 
+
+close112 <- data_81 %>%
+  filter(year == 2006) %>%
+  mutate(prop = sum/(sum(six$PATWT))*100)
+close111 <- data_81 %>%
+  filter(year == 2007) %>%
+  mutate(prop = sum/(sum(seven$PATWT))*100)
+close211 <- data_81 %>%
+  filter(year == 2008) %>%
+  mutate(prop = sum/(sum(eight$PATWT))*100)
+close311 <- data_81 %>%
+  filter(year == 2009) %>%
+  mutate(prop = sum/(sum(nine$PATWT))*100)
+close411 <- data_81 %>%
+  filter(year == 2010) %>%
+  mutate(prop = sum/(sum(ten$PATWT))*100)
+close511 <- data_81 %>%
+  filter(year == 2011) %>%
+  mutate(prop = sum/(sum(eleven$PATWT))*100)
+close611 <- data_81 %>%
+  filter(year == 2012) %>%
+  mutate(prop = sum/(sum(twelve$PATWT))*100)
+close711 <- data_81 %>%
+  filter(year == 2013) %>%
+  mutate(prop = sum/(sum(thirteen$PATWT))*100)
+close811 <- data_81 %>%
+  filter(year == 2014) %>%
+  mutate(prop = sum/(sum(fourteen$PATWT))*100)
+close911 <- data_81 %>%
+  filter(year == 2015) %>%
+  mutate(prop = sum/(sum(fifteen$PATWT))*100)
+close1011 <- data_81 %>%
+  filter(year == 2016) %>%
+  mutate(prop = sum/(sum(sixteen$PATWT))*100)
+
+data_81summary <- rbind(close112, close111, close211, close311, close411, close511, close611, close711, close811, close911, close1011) %>%
+  select(year, prop, MED, RFV)
+
+write.csv(data_81summary, file = "data_81summary.csv")
+
+ggplot(data_81summary, aes(x = RFV, y = prop))+
+  geom_bar(
+    aes(fill = MED), stat = "identity", color = "white",
+    position = position_dodge(0.9)
+    )+
+  facet_wrap(~year) +
   theme(legend.position = "none")
 ```
 
