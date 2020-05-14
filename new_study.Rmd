@@ -1246,7 +1246,7 @@ write.csv(data_8summary2, file = "mental_opioid_rate_byname.csv")
 ```
 
 ```{r}
-#all patients stats tests by drug
+#mental health patients stats tests by drug
 close12 <- data_8 %>%
   filter(year == 2006) %>%
   mutate(prop = 24183976)
@@ -1439,15 +1439,6 @@ proptest_hyf2
 
 proptrend_hyf2 <- prop.trend.test(HYDROCODONE_FENTANYL2$yes, HYDROCODONE_FENTANYL2$no)
 proptrend_hyf2
-
-MEPERIDINE_BUTORPHANOL2 <- data_8summary12 %>%
-  filter(MED == "MEPERIDINE, BUTORPHANOL")
-
-proptest_mbu2 <- pairwise.prop.test(MEPERIDINE_BUTORPHANOL2$yes, MEPERIDINE_BUTORPHANOL2$no)
-proptest_mbu2
-
-proptrend_mbu2 <- prop.trend.test(MEPERIDINE_BUTORPHANOL2$yes, MEPERIDINE_BUTORPHANOL2$no)
-proptrend_mbu2
 ```
 ```
 
