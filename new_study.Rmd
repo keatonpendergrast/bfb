@@ -704,6 +704,10 @@ ggplot(data_2summary, aes(year, prop, colour = MED)) +
 library(reshape2)
 data_2summary2 <- recast(data_2summary, year + variable ~ MED, id.var = c("MED", "year"))
 write.csv(data_2summary2, file = "opioids_all_byname.csv")
+```
+
+```{r}
+#all patients stats tests by drug
 
 close03a <- data_2 %>%
   filter(year == 2006) %>%
@@ -752,6 +756,267 @@ proptest_cod
 
 proptrend_cod <- prop.trend.test(codeine$yes, codeine$no)
 proptrend_cod
+
+BUPRENORPHINE <- data_2summarya %>%
+  filter(MED == "BUPRENORPHINE")
+
+proptest_bup <- pairwise.prop.test(BUPRENORPHINE$yes, BUPRENORPHINE$no)
+proptest_bup
+
+proptrend_bup <- prop.trend.test(BUPRENORPHINE$yes, BUPRENORPHINE$no)
+proptrend_bup
+
+FENTANYL <- data_2summarya %>%
+  filter(MED == "FENTANYL")
+
+proptest_fen <- pairwise.prop.test(FENTANYL$yes, FENTANYL$no)
+proptest_fen
+
+proptrend_fen <- prop.trend.test(FENTANYL$yes, FENTANYL$no)
+proptrend_fen
+
+BUTORPHANOL <- data_2summarya %>%
+  filter(MED == "BUTORPHANOL")
+
+proptest_but <- pairwise.prop.test(BUTORPHANOL$yes, BUTORPHANOL$no)
+proptest_but
+
+proptrend_but <- prop.trend.test(BUTORPHANOL$yes, BUTORPHANOL$no)
+proptrend_but
+
+DIHYDROCODEINE <- data_2summarya %>%
+  filter(MED == "DIHYDROCODEINE")
+
+proptest_dih <- pairwise.prop.test(DIHYDROCODEINE$yes, DIHYDROCODEINE$no)
+proptest_dih
+
+proptrend_dih <- prop.trend.test(DIHYDROCODEINE$yes, DIHYDROCODEINE$no)
+proptrend_dih
+
+HYDROMORPHONE <- data_2summarya %>%
+  filter(MED == "HYDROMORPHONE")
+
+proptest_hmo <- pairwise.prop.test(HYDROMORPHONE$yes, HYDROMORPHONE$no)
+proptest_hmo
+
+proptrend_hmo <- prop.trend.test(HYDROMORPHONE$yes, HYDROMORPHONE$no)
+proptrend_hmo
+
+HYDROMORPHONE_FENTANYL <- data_2summarya %>%
+  filter(MED == "HYDROMORPHONE, FENTANYL")
+
+proptest_hmf <- pairwise.prop.test(HYDROMORPHONE_FENTANYL$yes, HYDROMORPHONE_FENTANYL$no)
+proptest_hmf
+
+proptrend_hmf <- prop.trend.test(HYDROMORPHONE_FENTANYL$yes, HYDROMORPHONE_FENTANYL$no)
+proptrend_hmf
+
+MEPERIDINE <- data_2summarya %>%
+  filter(MED == "MEPERIDINE")
+
+proptest_mep <- pairwise.prop.test(MEPERIDINE$yes, MEPERIDINE$no)
+proptest_mep
+
+proptrend_mep <- prop.trend.test(MEPERIDINE$yes, MEPERIDINE$no)
+proptrend_mep
+
+MEPERIDINE_OXYCODONE <- data_2summarya %>%
+  filter(MED == "MEPERIDINE, OXYCODONE")
+
+proptest_meo <- pairwise.prop.test(MEPERIDINE_OXYCODONE$yes, MEPERIDINE_OXYCODONE$no)
+proptest_meo
+
+proptrend_meo <- prop.trend.test(MEPERIDINE_OXYCODONE$yes, MEPERIDINE_OXYCODONE$no)
+proptrend_meo
+
+METHADONE <- data_2summarya %>%
+  filter(MED == "METHADONE")
+
+proptest_met <- pairwise.prop.test(METHADONE$yes, METHADONE$no)
+proptest_met
+
+proptrend_met <- prop.trend.test(METHADONE$yes, METHADONE$no)
+proptrend_met
+
+METHADONE_FENTANYL <- data_2summarya %>%
+  filter(MED == "METHADONE, FENTANYL")
+
+proptest_mef <- pairwise.prop.test(METHADONE_FENTANYL$yes, METHADONE_FENTANYL$no)
+proptest_mef
+
+proptrend_mef <- prop.trend.test(METHADONE_FENTANYL$yes, METHADONE_FENTANYL$no)
+proptrend_mef
+
+METHADONE_HYDROMORPHONE <- data_2summarya %>%
+  filter(MED == "METHADONE, HYDROMORPHONE")
+
+proptest_meh <- pairwise.prop.test(METHADONE_HYDROMORPHONE$yes, METHADONE_HYDROMORPHONE$no)
+proptest_meh
+
+proptrend_meh <- prop.trend.test(METHADONE_HYDROMORPHONE$yes, METHADONE_HYDROMORPHONE$no)
+proptrend_meh
+
+MORPHINE <- data_2summarya %>%
+  filter(MED == "MORPHINE")
+
+proptest_mor <- pairwise.prop.test(MORPHINE$yes, MORPHINE$no)
+proptest_mor
+
+proptrend_mor <- prop.trend.test(MORPHINE$yes, MORPHINE$no)
+proptrend_mor
+
+MORPHINE_FENTANYL <- data_2summarya %>%
+  filter(MED == "MORPHINE, FENTANYL")
+
+proptest_mfe <- pairwise.prop.test(MORPHINE_FENTANYL$yes, MORPHINE_FENTANYL$no)
+proptest_mfe
+
+proptrend_mfe <- prop.trend.test(MORPHINE_FENTANYL$yes, MORPHINE_FENTANYL$no)
+proptrend_mfe
+
+MORPHINE_HYDROMORPHONE <- data_2summarya %>%
+  filter(MED == "MORPHINE, HYDROMORPHONE")
+
+proptest_mhy <- pairwise.prop.test(MORPHINE_HYDROMORPHONE$yes, MORPHINE_HYDROMORPHONE$no)
+proptest_mhy
+
+proptrend_mhy <- prop.trend.test(MORPHINE_HYDROMORPHONE$yes, MORPHINE_HYDROMORPHONE$no)
+proptrend_mhy
+
+OPIUM <- data_2summarya %>%
+  filter(MED == "OPIUM")
+
+proptest_opi <- pairwise.prop.test(OPIUM$yes, OPIUM$no)
+proptest_opi
+
+proptrend_opi <- prop.trend.test(OPIUM$yes, OPIUM$no)
+proptrend_opi
+
+OXYCODONE <- data_2summarya %>%
+  filter(MED == "OXYCODONE")
+
+proptest_oxy <- pairwise.prop.test(OXYCODONE$yes, OXYCODONE$no)
+proptest_oxy
+
+proptrend_oxy <- prop.trend.test(OXYCODONE$yes, OXYCODONE$no)
+proptrend_oxy
+
+OXYCODONE_BUPRENORPHINE <- data_2summarya %>%
+  filter(MED == "OXYCODONE, BUPRENORPHINE")
+
+proptest_obu <- pairwise.prop.test(OXYCODONE_BUPRENORPHINE$yes, OXYCODONE_BUPRENORPHINE$no)
+proptest_obu
+
+proptrend_obu <- prop.trend.test(OXYCODONE_BUPRENORPHINE$yes, OXYCODONE_BUPRENORPHINE$no)
+proptrend_obu
+
+OXYCODONE_CODEINE <- data_2summarya %>%
+  filter(MED == "OXYCODONE, CODEINE")
+
+proptest_oco <- pairwise.prop.test(OXYCODONE_CODEINE$yes, OXYCODONE_CODEINE$no)
+proptest_oco
+
+proptrend_oco <- prop.trend.test(OXYCODONE_CODEINE$yes, OXYCODONE_CODEINE$no)
+proptrend_oco
+
+OXYCODONE_FENTANYL <- data_2summarya %>%
+  filter(MED == "OXYCODONE, FENTANYL")
+
+proptest_ofn <- pairwise.prop.test(OXYCODONE_FENTANYL$yes, OXYCODONE_FENTANYL$no)
+proptest_ofn
+
+proptrend_ofn <- prop.trend.test(OXYCODONE_FENTANYL$yes, OXYCODONE_FENTANYL$no)
+proptrend_ofn
+
+OXYCODONE_METHADONE <- data_2summarya %>%
+  filter(MED == "OXYCODONE, METHADONE")
+
+proptest_ome <- pairwise.prop.test(OXYCODONE_METHADONE$yes, OXYCODONE_METHADONE$no)
+proptest_ome
+
+proptrend_ome <- prop.trend.test(OXYCODONE_METHADONE$yes, OXYCODONE_METHADONE$no)
+proptrend_ome
+ 
+OXYCODONE_PROPOXYPHENE <- data_2summarya %>%
+  filter(MED == "OXYCODONE, PROPOXYPHENE")
+
+proptest_opr <- pairwise.prop.test(OXYCODONE_PROPOXYPHENE$yes, OXYCODONE_PROPOXYPHENE$no)
+proptest_opr
+
+proptrend_opr <- prop.trend.test(OXYCODONE_PROPOXYPHENE$yes, OXYCODONE_PROPOXYPHENE$no)
+proptrend_opr
+
+PENTAZOCINE <- data_2summarya %>%
+  filter(MED == "PENTAZOCINE")
+
+proptest_ope <- pairwise.prop.test(PENTAZOCINE$yes, PENTAZOCINE$no)
+proptest_ope
+
+proptrend_ope <- prop.trend.test(PENTAZOCINE$yes, PENTAZOCINE$no)
+proptrend_ope
+
+PROPOXYPHENE <- data_2summarya %>%
+  filter(MED == "PROPOXYPHENE")
+
+proptest_pro <- pairwise.prop.test(PROPOXYPHENE$yes, PROPOXYPHENE$no)
+proptest_pro
+
+proptrend_pro <- prop.trend.test(PROPOXYPHENE$yes, PROPOXYPHENE$no)
+proptrend_pro
+
+PROPOXYPHENE <- data_2summarya %>%
+  filter(MED == "PROPOXYPHENE")
+
+proptest_pro <- pairwise.prop.test(PROPOXYPHENE$yes, PROPOXYPHENE$no)
+proptest_pro
+
+proptrend_pro <- prop.trend.test(PROPOXYPHENE$yes, PROPOXYPHENE$no)
+proptrend_pro
+
+BUPRENORPHINE <- data_2summarya %>%
+  filter(MED == "BUPRENORPHINE")
+
+proptest_bne <- pairwise.prop.test(BUPRENORPHINE$yes, BUPRENORPHINE$no)
+proptest_bne
+
+proptrend_bne <- prop.trend.test(BUPRENORPHINE$yes, BUPRENORPHINE$no)
+proptrend_bne
+
+BUTORPHANOL <- data_2summarya %>%
+  filter(MED == "BUTORPHANOL")
+
+proptest_bnl <- pairwise.prop.test(BUTORPHANOL$yes, BUTORPHANOL$no)
+proptest_bnl
+
+proptrend_bnl <- prop.trend.test(BUTORPHANOL$yes, BUTORPHANOL$no)
+proptrend_bnl
+
+FENTANYL_CODEINE <- data_2summarya %>%
+  filter(MED == "FENTANYL, CODEINE")
+
+proptest_fco <- pairwise.prop.test(FENTANYL_CODEINE$yes, FENTANYL_CODEINE$no)
+proptest_fco
+
+proptrend_fco <- prop.trend.test(FENTANYL_CODEINE$yes, FENTANYL_CODEINE$no)
+proptrend_fco
+
+HYDROMORPHONE_FENTANYL <- data_2summarya %>%
+  filter(MED == "HYDROMORPHONE, FENTANYL")
+
+proptest_hfl <- pairwise.prop.test(HYDROMORPHONE_FENTANYL$yes, HYDROMORPHONE_FENTANYL$no)
+proptest_hfl
+
+proptrend_hfl <- prop.trend.test(HYDROMORPHONE_FENTANYL$yes, HYDROMORPHONE_FENTANYL$no)
+proptrend_hfl
+
+HYDROMORPHONE_OXYCODONE <- data_2summarya %>%
+  filter(MED == "HYDROMORPHONE, OXYCODONE")
+
+proptest_hpo <- pairwise.prop.test(HYDROMORPHONE_OXYCODONE$yes, HYDROMORPHONE_OXYCODONE$no)
+proptest_hpo
+
+proptrend_hpo <- prop.trend.test(HYDROMORPHONE_OXYCODONE$yes, HYDROMORPHONE_OXYCODONE$no)
+proptrend_hpo
 ```
 
 ```{r}
@@ -925,7 +1190,6 @@ data_7 <- data_4 %>%
     data_7[ data_7 == "OXYCODONE, HYDROMORPHONE" ] <- "HYDROMORPHONE, OXYCODONE"
     data_7[ data_7 == "OXYCODONE, HYDROMORPHONE, MORPHINE" ] <- "OXYCODONE, MORPHINE, HYDROMORPHONE"
 
-
 data_7 <- data_7[!(data_7$MED == ""), ]
 
 data_8 <- data_7 %>%
@@ -980,6 +1244,213 @@ ggplot(data_8summary, aes(year, prop, colour = MED)) +
 data_8summary2 <- recast(data_8summary, year + variable ~ MED, id.var = c("MED", "year"))
 write.csv(data_8summary2, file = "mental_opioid_rate_byname.csv")
 ```
+
+```{r}
+#all patients stats tests by drug
+close12 <- data_8 %>%
+  filter(year == 2006) %>%
+  mutate(prop = 24183976)
+close112 <- data_8 %>%
+  filter(year == 2007) %>%
+  mutate(prop = 28675605)
+close212 <- data_8 %>%
+  filter(year == 2008) %>%
+  mutate(prop = 25519383)
+close312 <- data_8 %>%
+  filter(year == 2009) %>%
+  mutate(prop = 33422924)
+close412 <- data_8 %>%
+  filter(year == 2010) %>%
+  mutate(prop = 22456621)
+close512 <- data_8 %>%
+  filter(year == 2011) %>%
+  mutate(prop = 28939245)
+close612 <- data_8 %>%
+  filter(year == 2012) %>%
+  mutate(prop = 26227511)
+close712 <- data_8 %>%
+  filter(year == 2013) %>%
+  mutate(prop = 29973376)
+close812 <- data_8 %>%
+  filter(year == 2014) %>%
+  mutate(prop = 31435352)
+close912 <- data_8 %>%
+  filter(year == 2015) %>%
+  mutate(prop = 37129324)
+close1012 <- data_8 %>%
+  filter(year == 2016) %>%
+  mutate(prop = 22999745)
+
+
+data_8summary12 <- rbind(close12, close112, close212, close312, close412, close512, close612, close712, close812, close912, close1012) %>%
+  mutate(no = prop) %>%
+  mutate(yes = sum) %>%
+  select(year, MED, yes, no)
+
+codeine2 <- data_8summary12 %>%
+  filter(MED == "CODEINE")
+
+proptest_cod2 <- pairwise.prop.test(codeine2$yes, codeine2$no)
+proptest_cod2
+
+proptrend_cod2 <- prop.trend.test(codeine2$yes, codeine2$no)
+proptrend_cod2
+
+BUPRENORPHINE2 <- data_8summary12 %>%
+  filter(MED == "BUPRENORPHINE")
+
+proptest_bup2 <- pairwise.prop.test(BUPRENORPHINE2$yes, BUPRENORPHINE2$no)
+proptest_bup2
+
+proptrend_bup2 <- prop.trend.test(BUPRENORPHINE2$yes, BUPRENORPHINE2$no)
+proptrend_bup2
+
+FENTANYL2 <- data_8summary12 %>%
+  filter(MED == "FENTANYL")
+
+proptest_fen2 <- pairwise.prop.test(FENTANYL2$yes, FENTANYL2$no)
+proptest_fen2
+
+proptrend_fen2 <- prop.trend.test(FENTANYL2$yes, FENTANYL2$no)
+proptrend_fen2
+
+HYDROMORPHONE2 <- data_8summary12 %>%
+  filter(MED == "HYDROMORPHONE")
+
+proptest_hmo2 <- pairwise.prop.test(HYDROMORPHONE2$yes, HYDROMORPHONE2$no)
+proptest_hmo2
+
+proptrend_hmo2 <- prop.trend.test(HYDROMORPHONE2$yes, HYDROMORPHONE2$no)
+proptrend_hmo2
+
+HYDROMORPHONE_FENTANYL2 <- data_8summary12 %>%
+  filter(MED == "HYDROMORPHONE, FENTANYL")
+
+proptest_hmf2 <- pairwise.prop.test(HYDROMORPHONE_FENTANYL2$yes, HYDROMORPHONE_FENTANYL2$no)
+proptest_hmf2
+
+proptrend_hmf2 <- prop.trend.test(HYDROMORPHONE_FENTANYL2$yes, HYDROMORPHONE_FENTANYL2$no)
+proptrend_hmf2
+
+METHADONE2 <- data_8summary12 %>%
+  filter(MED == "METHADONE")
+
+proptest_met2 <- pairwise.prop.test(METHADONE2$yes, METHADONE2$no)
+proptest_met2
+
+proptrend_met2 <- prop.trend.test(METHADONE2$yes, METHADONE2$no)
+proptrend_met2
+
+MORPHINE2 <- data_8summary12 %>%
+  filter(MED == "MORPHINE")
+
+proptest_mor2 <- pairwise.prop.test(MORPHINE2$yes, MORPHINE2$no)
+proptest_mor2
+
+proptrend_mor2 <- prop.trend.test(MORPHINE2$yes, MORPHINE2$no)
+proptrend_mor2
+
+OPIUM2 <- data_8summary12 %>%
+  filter(MED == "OPIUM")
+
+proptest_opi2 <- pairwise.prop.test(OPIUM2$yes, OPIUM2$no)
+proptest_opi2
+
+proptrend_opi2 <- prop.trend.test(OPIUM2$yes, OPIUM2$no)
+proptrend_opi2
+
+OXYCODONE2 <- data_8summary12 %>%
+  filter(MED == "OXYCODONE")
+
+proptest_oxy2 <- pairwise.prop.test(OXYCODONE2$yes, OXYCODONE2$no)
+proptest_oxy2
+
+proptrend_oxy2 <- prop.trend.test(OXYCODONE2$yes, OXYCODONE2$no)
+proptrend_oxy2
+
+OXYCODONE_CODEINE2 <- data_8summary12 %>%
+  filter(MED == "OXYCODONE, CODEINE")
+
+proptest_oco2 <- pairwise.prop.test(OXYCODONE_CODEINE2$yes, OXYCODONE_CODEINE2$no)
+proptest_oco2
+
+proptrend_oco2 <- prop.trend.test(OXYCODONE_CODEINE2$yes, OXYCODONE_CODEINE2$no)
+proptrend_oco2
+
+OXYCODONE_FENTANYL2 <- data_8summary12 %>%
+  filter(MED == "OXYCODONE, FENTANYL")
+
+proptest_ofn2 <- pairwise.prop.test(OXYCODONE_FENTANYL2$yes, OXYCODONE_FENTANYL2$no)
+proptest_ofn2
+
+proptrend_ofn2 <- prop.trend.test(OXYCODONE_FENTANYL2$yes, OXYCODONE_FENTANYL2$no)
+proptrend_ofn2
+
+OXYCODONE_METHADONE2 <- data_8summary12 %>%
+  filter(MED == "OXYCODONE, METHADONE")
+
+proptest_ome2 <- pairwise.prop.test(OXYCODONE_METHADONE2$yes, OXYCODONE_METHADONE2$no)
+proptest_ome2
+
+proptrend_ome2 <- prop.trend.test(OXYCODONE_METHADONE2$yes, OXYCODONE_METHADONE2$no)
+proptrend_ome2
+
+BUPRENORPHINE2 <- data_8summary12 %>%
+  filter(MED == "BUPRENORPHINE")
+
+proptest_bne2 <- pairwise.prop.test(BUPRENORPHINE2$yes, BUPRENORPHINE2$no)
+proptest_bne2
+
+proptrend_bne2 <- prop.trend.test(BUPRENORPHINE2$yes, BUPRENORPHINE2$no)
+proptrend_bne2
+
+HYDROMORPHONE_FENTANYL2 <- data_8summary12 %>%
+  filter(MED == "HYDROMORPHONE, FENTANYL")
+
+proptest_hfl2 <- pairwise.prop.test(HYDROMORPHONE_FENTANYL2$yes, HYDROMORPHONE_FENTANYL2$no)
+proptest_hfl2
+
+proptrend_hfl2 <- prop.trend.test(HYDROMORPHONE_FENTANYL2$yes, HYDROMORPHONE_FENTANYL2$no)
+proptrend_hfl2
+
+METHADONE_HYDROCODONE2 <- data_8summary12 %>%
+  filter(MED == "METHADONE, HYDROCODONE")
+
+proptest_mhd2 <- pairwise.prop.test(METHADONE_HYDROCODONE2$yes, METHADONE_HYDROCODONE2$no)
+proptest_mhd2
+
+proptrend_mhd2 <- prop.trend.test(METHADONE_HYDROCODONE2$yes, METHADONE_HYDROCODONE2$no)
+proptrend_mhd2
+
+OXYCODONE_HYDROCODONE2 <- data_8summary12 %>%
+  filter(MED == "OXYCODONE, HYDROCODONE")
+
+proptest_ohe2 <- pairwise.prop.test(OXYCODONE_HYDROCODONE2$yes, OXYCODONE_HYDROCODONE2$no)
+proptest_ohe2
+
+proptrend_ohe2 <- prop.trend.test(OXYCODONE_HYDROCODONE2$yes, OXYCODONE_HYDROCODONE2$no)
+proptrend_ohe2
+
+HYDROCODONE_FENTANYL2 <- data_8summary12 %>%
+  filter(MED == "HYDROCODONE, FENTANYL")
+
+proptest_hyf2 <- pairwise.prop.test(HYDROCODONE_FENTANYL2$yes, HYDROCODONE_FENTANYL2$no)
+proptest_hyf2
+
+proptrend_hyf2 <- prop.trend.test(HYDROCODONE_FENTANYL2$yes, HYDROCODONE_FENTANYL2$no)
+proptrend_hyf2
+
+MEPERIDINE_BUTORPHANOL2 <- data_8summary12 %>%
+  filter(MED == "MEPERIDINE, BUTORPHANOL")
+
+proptest_mbu2 <- pairwise.prop.test(MEPERIDINE_BUTORPHANOL2$yes, MEPERIDINE_BUTORPHANOL2$no)
+proptest_mbu2
+
+proptrend_mbu2 <- prop.trend.test(MEPERIDINE_BUTORPHANOL2$yes, MEPERIDINE_BUTORPHANOL2$no)
+proptrend_mbu2
+```
+```
+
 
 ```{r}
 # the overall opioid rate PER year amongst behavioural health patients ONLY
@@ -1066,7 +1537,7 @@ closekb <- data_6 %>%
   filter(year == 2016) %>%
   mutate(prop = 22999745)
 
-data_6summaryb <- rbind(closeab, closebb, closecb, closedb, closeeb, closefb, closegb, closehb, closeib, closejb, closekb)%>%
+data_6summaryb <- rbind(closeab, closebb, closecb, closedb, closeeb, closefb, closegb, closehb, closeib, closejb, closekb) %>%
   mutate(no = prop) %>%
   mutate(yes = sum) %>%
   select(year, yes, no)
