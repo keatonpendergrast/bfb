@@ -589,13 +589,49 @@ data_0summary <- rbind(close0, close11, close22, close33, close44, close55, clos
   
 write.csv(data_0summary, file = "everyone_on_opioids.csv")
 
-prop <- data_0summary %>%
-  mutate(no = 100)
+close03 <- data_0 %>%
+  filter(year == 2006) %>%
+  mutate(prop = sum(six$PATWT))
+close113 <- data_0 %>%
+  filter(year == 2007) %>%
+  mutate(prop = sum(seven$PATWT))
+close223 <- data_0 %>%
+  filter(year == 2008) %>%
+  mutate(prop = sum(eight$PATWT))
+close333 <- data_0 %>%
+  filter(year == 2009) %>%
+  mutate(prop = sum(nine$PATWT))
+close443 <- data_0 %>%
+  filter(year == 2010) %>%
+  mutate(prop = sum(ten$PATWT))
+close553 <- data_0 %>%
+  filter(year == 2011) %>%
+  mutate(prop = sum(eleven$PATWT))
+close663 <- data_0 %>%
+  filter(year == 2012) %>%
+  mutate(prop = sum(twelve$PATWT))
+close773 <- data_0 %>%
+  filter(year == 2013) %>%
+  mutate(prop = sum(thirteen$PATWT))
+close883 <- data_0 %>%
+  filter(year == 2014) %>%
+  mutate(prop = sum(fourteen$PATWT))
+close993 <- data_0 %>%
+  filter(year == 2015) %>%
+  mutate(prop = sum(fifteen$PATWT))
+close1003 <- data_0 %>%
+  filter(year == 2016) %>%
+  mutate(prop = sum(sixteen$PATWT))
 
-proptest <- pairwise.prop.test(prop$prop, prop$no)
+data_0summary22 <- rbind(close03, close113, close223, close333, close443, close553, close663, close773, close883, close993, close1003) %>%
+  mutate(no = prop) %>%
+  mutate(yes = sum) %>%
+  select(year, yes, no)
+
+proptest <- pairwise.prop.test(data_0summary22$yes, data_0summary22$no)
 proptest
 
-proptrend <- prop.trend.test(prop$prop, prop$no)
+proptrend <- prop.trend.test(data_0summary22$yes, data_0summary22$no)
 proptrend
 ```
 
@@ -668,50 +704,6 @@ ggplot(data_2summary, aes(year, prop, colour = MED)) +
 library(reshape2)
 data_2summary2 <- recast(data_2summary, year + variable ~ MED, id.var = c("MED", "year"))
 write.csv(data_2summary2, file = "opioids_all_byname.csv")
-
-buprenorphine <- data_2summary2 %>%
-  mutate(prop = BUPRENORPHINE*1000) %>%
-  mutate(no = 1000) %>%
-  select(prop, no)
-
-proptest_bup <- pairwise.prop.test(buprenorphine$prop, buprenorphine$no)
-proptest_bup
-
-proptrend_bup <- prop.trend.test(buprenorphine$prop, buprenorphine$no)
-proptrend_bup
-
-CODEINE <- data_2summary2 %>%
-  mutate(prop = CODEINE*1000) %>%
-  mutate(no = 1000) %>%
-  select(prop, no)
-
-proptest_cod <- pairwise.prop.test(CODEINE$prop, CODEINE$no)
-proptest_cod
-
-proptrend_cod <- prop.trend.test(CODEINE$prop, CODEINE$no)
-proptrend_cod
-
-FENTANYL <- data_2summary2 %>%
-  mutate(prop = FENTANYL*1000) %>%
-  mutate(no = 1000) %>%
-  select(prop, no)
-
-proptest_fen <- pairwise.prop.test(FENTANYL$prop, FENTANYL$no)
-proptest_fen
-
-proptrend_fen <- prop.trend.test(FENTANYL$prop, FENTANYL$no)
-proptrend_fen
-
-HYDROMORPHONE <- data_2summary2 %>%
-  mutate(prop = HYDROMORPHONE*1000) %>%
-  mutate(no = 1000) %>%
-  select(prop, no)
-
-proptest_hydrmp <- pairwise.prop.test(HYDROMORPHONE$prop, HYDROMORPHONE$no)
-proptest_hydrmp
-
-proptrend_hydrmp <- prop.trend.test(HYDROMORPHONE$prop, HYDROMORPHONE$no)
-proptrend_hydrmp
 ```
 
 ```{r}
@@ -992,14 +984,49 @@ write.csv(data_6summary, file = "mental_rate_overall.csv")
 scatter.smooth(x=data_6summary$year, y=data_6summary$prop) +
   title(main="Opioid Prescriptions Per Capita")
 
-prop2 <- data_6summary %>%
-  mutate(prop = prop*100) %>%
-  mutate(no = 1000)
+closeab <- data_6 %>%
+  filter(year == 2006) %>%
+  mutate(prop = 24183976)
+closebb <- data_6 %>%
+  filter(year == 2007) %>%
+  mutate(prop = 28675605)
+closecb <- data_6 %>%
+  filter(year == 2008) %>%
+  mutate(prop = 25519383)
+closedb <- data_6 %>%
+  filter(year == 2009) %>%
+  mutate(prop = 33422924)
+closeeb <- data_6 %>%
+  filter(year == 2010) %>%
+  mutate(prop = 22456621)
+closefb <- data_6 %>%
+  filter(year == 2011) %>%
+  mutate(prop = 28939245)
+closegb <- data_6 %>%
+  filter(year == 2012) %>%
+  mutate(prop = 26227511)
+closehb <- data_6 %>%
+  filter(year == 2013) %>%
+  mutate(prop = 29973376)
+closeib <- data_6 %>%
+  filter(year == 2014) %>%
+  mutate(prop = 31435352)
+closejb <- data_6 %>%
+  filter(year == 2015) %>%
+  mutate(prop = 37129324)
+closekb <- data_6 %>%
+  filter(year == 2016) %>%
+  mutate(prop = 22999745)
 
-proptest2 <- pairwise.prop.test(prop2$prop, prop2$no)
+data_6summaryb <- rbind(closeab, closebb, closecb, closedb, closeeb, closefb, closegb, closehb, closeib, closejb, closekb)%>%
+  mutate(no = prop) %>%
+  mutate(yes = sum) %>%
+  select(year, yes, no)
+
+proptest2 <- pairwise.prop.test(data_6summaryb$yes, data_6summaryb$no)
 proptest2
 
-proptrend2 <- prop.trend.test(prop2$prop, prop2$no)
+proptrend2 <- prop.trend.test(data_6summaryb$yes, data_6summaryb$no)
 proptrend2
 ```
 
