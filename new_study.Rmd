@@ -589,7 +589,14 @@ data_0summary <- rbind(close0, close11, close22, close33, close44, close55, clos
   
 write.csv(data_0summary, file = "everyone_on_opioids.csv")
 
+prop <- data_0summary %>%
+  mutate(no = 100)
 
+proptest <- pairwise.prop.test(prop$prop, prop$no)
+proptest
+
+proptrend <- prop.trend.test(prop$prop, prop$no)
+proptrend
 ```
 
 ```{r}
@@ -661,6 +668,50 @@ ggplot(data_2summary, aes(year, prop, colour = MED)) +
 library(reshape2)
 data_2summary2 <- recast(data_2summary, year + variable ~ MED, id.var = c("MED", "year"))
 write.csv(data_2summary2, file = "opioids_all_byname.csv")
+
+buprenorphine <- data_2summary2 %>%
+  mutate(prop = BUPRENORPHINE*1000) %>%
+  mutate(no = 1000) %>%
+  select(prop, no)
+
+proptest_bup <- pairwise.prop.test(buprenorphine$prop, buprenorphine$no)
+proptest_bup
+
+proptrend_bup <- prop.trend.test(buprenorphine$prop, buprenorphine$no)
+proptrend_bup
+
+CODEINE <- data_2summary2 %>%
+  mutate(prop = CODEINE*1000) %>%
+  mutate(no = 1000) %>%
+  select(prop, no)
+
+proptest_cod <- pairwise.prop.test(CODEINE$prop, CODEINE$no)
+proptest_cod
+
+proptrend_cod <- prop.trend.test(CODEINE$prop, CODEINE$no)
+proptrend_cod
+
+FENTANYL <- data_2summary2 %>%
+  mutate(prop = FENTANYL*1000) %>%
+  mutate(no = 1000) %>%
+  select(prop, no)
+
+proptest_fen <- pairwise.prop.test(FENTANYL$prop, FENTANYL$no)
+proptest_fen
+
+proptrend_fen <- prop.trend.test(FENTANYL$prop, FENTANYL$no)
+proptrend_fen
+
+HYDROMORPHONE <- data_2summary2 %>%
+  mutate(prop = HYDROMORPHONE*1000) %>%
+  mutate(no = 1000) %>%
+  select(prop, no)
+
+proptest_hydrmp <- pairwise.prop.test(HYDROMORPHONE$prop, HYDROMORPHONE$no)
+proptest_hydrmp
+
+proptrend_hydrmp <- prop.trend.test(HYDROMORPHONE$prop, HYDROMORPHONE$no)
+proptrend_hydrmp
 ```
 
 ```{r}
@@ -940,6 +991,16 @@ write.csv(data_6summary, file = "mental_rate_overall.csv")
 
 scatter.smooth(x=data_6summary$year, y=data_6summary$prop) +
   title(main="Opioid Prescriptions Per Capita")
+
+prop2 <- data_6summary %>%
+  mutate(prop = prop*100) %>%
+  mutate(no = 1000)
+
+proptest2 <- pairwise.prop.test(prop2$prop, prop2$no)
+proptest2
+
+proptrend2 <- prop.trend.test(prop2$prop, prop2$no)
+proptrend2
 ```
 
 ```{r}
@@ -1111,7 +1172,9 @@ mt <- ggplot(data_81summary, aes(year, prop, colour = factor(MED))) +
   geom_point()
 
 mt + facet_grid(vars(RFV), scales = "free")
+
+library(reshape2)
+data_81summary2 <- recast(data_81summary, RFV + variable ~ MED, id.var = c("MED", "RFV"))
+
+write.csv(data_81summary2, file = "mental_bymed_andRFV.csv")
 ```
-
-
-
