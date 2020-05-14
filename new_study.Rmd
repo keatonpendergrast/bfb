@@ -704,6 +704,54 @@ ggplot(data_2summary, aes(year, prop, colour = MED)) +
 library(reshape2)
 data_2summary2 <- recast(data_2summary, year + variable ~ MED, id.var = c("MED", "year"))
 write.csv(data_2summary2, file = "opioids_all_byname.csv")
+
+close03a <- data_2 %>%
+  filter(year == 2006) %>%
+  mutate(prop = sum(six$PATWT))
+close113a <- data_2 %>%
+  filter(year == 2007) %>%
+  mutate(prop = sum(seven$PATWT))
+close223a <- data_2 %>%
+  filter(year == 2008) %>%
+  mutate(prop = sum(eight$PATWT))
+close333a <- data_2 %>%
+  filter(year == 2009) %>%
+  mutate(prop = sum(nine$PATWT))
+close443a <- data_2 %>%
+  filter(year == 2010) %>%
+  mutate(prop = sum(ten$PATWT))
+close553a <- data_2 %>%
+  filter(year == 2011) %>%
+  mutate(prop = sum(eleven$PATWT))
+close663a <- data_2 %>%
+  filter(year == 2012) %>%
+  mutate(prop = sum(twelve$PATWT))
+close773a <- data_2 %>%
+  filter(year == 2013) %>%
+  mutate(prop = sum(thirteen$PATWT))
+close883a <- data_2 %>%
+  filter(year == 2014) %>%
+  mutate(prop = sum(fourteen$PATWT))
+close993a <- data_2 %>%
+  filter(year == 2015) %>%
+  mutate(prop = sum(fifteen$PATWT))
+close1003a <- data_2 %>%
+  filter(year == 2016) %>%
+  mutate(prop = sum(sixteen$PATWT))
+
+data_2summarya <- rbind(close03a, close113a, close223a, close333a, close443a, close553a, close663a, close773a, close883a, close993a, close1003a) %>%
+  mutate(no = prop) %>%
+  mutate(yes = sum) %>%
+  select(year, MED, yes, no)
+
+codeine <- data_2summarya %>%
+  filter(MED == "CODEINE")
+
+proptest_cod <- pairwise.prop.test(codeine$yes, codeine$no)
+proptest_cod
+
+proptrend_cod <- prop.trend.test(codeine$yes, codeine$no)
+proptrend_cod
 ```
 
 ```{r}
