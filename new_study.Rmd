@@ -16,6 +16,7 @@ require(readr)
 require(tikzDevice)
 require(usethis)
 library(stringr)
+library(goeveg)
 ```
 
 ```{r}
@@ -432,12 +433,12 @@ data[ data == "11650" ] <- "Other"
 data$PATWT <- as.numeric(as.character(data$PATWT)) 
 
 data_1 <- data %>%
-  select(year, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
+  select(year, PATWT, AGE, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
   unite(MED, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
    mutate(rn = row_number()) %>%
    separate_rows(MED) %>%
-   filter(MED %in% c("OXYCODONE", "PROPOXYPHENE", "REMIFENTANIL", "SUFENTANIL", "TAPENTADOL", "OXYMORPHONE", "PHENEROL", "MORPHINE", "NALBUPHINE", "Narcotic_Analgesics", "LEVORPHANOL", "MEPERIDINE", "METHADONE", "DIHYDROCODEINE", "FENTANYL", "OXYCODONE", "HYDROMORPHONE", "OPIUM", "BUPRENORPHINE", "BUTORPHANOL", "CODEINE", "PHENYLPROPANOLAMINE", "DEZOCINE", "ALFENTANIL", "ALPHAPRODINE", "DEXTROPROPOXYPHENE", "", "PENTAZOCINE")) %>%
-   group_by(rn, year) %>%
+   filter(MED %in% c("OXYCODONE", "PROPOXYPHENE", "REMIFENTANIL", "SUFENTANIL", "TAPENTADOL", "OXYMORPHONE", "PHENEROL", "MORPHINE", "NALBUPHINE", "Narcotic_Analgesics", "LEVORPHANOL", "MEPERIDINE", "METHADONE", "DIHYDROCODEINE", "FENTANYL", "OXYCODONE", "HYDROMORPHONE", "OPIUM", "BUPRENORPHINE", "BUTORPHANOL", "CODEINE", "PHENYLPROPANOLAMINE", "DEZOCINE", "ALFENTANIL", "ALPHAPRODINE", "DEXTROPROPOXYPHENE", "PENTAZOCINE")) %>%
+   group_by(rn, year, AGE) %>%
    summarise(PATWT = first(PATWT), MED = toString(unique(MED))) %>%
    select(-rn)
 
@@ -544,11 +545,15 @@ data_1 <- data %>%
   #remove blank entries
 data_1[Reduce(`&`, lapply(data_1, function(x) !(is.na(x)|x==""))),]
 
+data_1$AGE[data_1$AGE == "DIHYDROCODEINE"] <- 44
+data$AGE[data$AGE == "DIHYDROCODEINE"] <- 44
+
 data_0 <- data_1 %>%
-  group_by(year) %>%
+  group_by(year, AGE) %>%
   summarise(sum = sum(PATWT, na.rm=T))
 
 data_0$sum <- as.numeric(as.character(data_0$sum)) 
+data_0$AGE <- as.numeric(as.character(data_0$AGE)) 
 
 close0 <- data_0 %>%
   filter(year == 2006) %>%
@@ -585,7 +590,7 @@ close100 <- data_0 %>%
   mutate(prop = sum/(sum(sixteen$PATWT))*100)
 
 data_0summary <- rbind(close0, close11, close22, close33, close44, close55, close66, close77, close88, close99, close100) %>%
-  select(year, prop)
+  select(year, prop, AGE)
   
 write.csv(data_0summary, file = "everyone_on_opioids.csv")
 
@@ -638,23 +643,28 @@ proptrend
 ```{r}
 #behavioural health patients total
 new <- data %>%
-  select(year, PATWT, RFV1, RFV2, RFV3) %>%
+  select(year, AGE, PATWT, RFV1, RFV2, RFV3) %>%
   unite(RFV, RFV1, RFV2, RFV3) %>%
    mutate(rn = row_number()) %>%
    separate_rows(RFV) %>%
    filter(RFV %in% c("Anxiety_Nervousness", "Fears_Phobias", "Depression", "Anger", "Problems_Identity_Self-esteem", "Restlessness", "Behavioral_Disturbances", "Antisocial_Behavior", "Hostile_Behavior", "Narcotic_Analgesics", "Hysterical_Behavior", "Temper_Problems", "Obsessions_Compulsions", "Disturbances_of_Sleep", "Insomnia", "Hypersomnia", "Nightmares", "Sleepwalking", "Sleep_Apnea", "Alcohol-related_Problems", "Abnormal_Drug_Usage", "Substance_Abuse", "Delusions_or_Hallucinations", "Other"))
 
+new$AGE[new$AGE == "DIHYDROCODEINE"] <- 44
+new$AGE <- as.numeric(as.character(new$AGE)) 
+
 new2 <- new %>%
-  select(year, PATWT) %>%
+  select(year, PATWT, AGE) %>%
   group_by(year) %>%
-  summarise(sum = sum(PATWT, na.rm=T))
+  summarise(sum = sum(PATWT, na.rm=T), avg_age = mean(AGE), sd_age = sem(AGE))
 ```
 
 ```{r}
-# the opioid rate PER year amongst ALL patients BY drug name
+# the opioid rate PER year amongst ALL patients BY drug name including AGE
+data_1$AGE <- as.numeric(as.character(data_1$AGE))
+
 data_2 <- data_1 %>%
   group_by(year, MED) %>%
-  summarise(sum = sum(PATWT, na.rm=T))
+  summarise(sum = sum(PATWT, na.rm=T), avg_age = mean(AGE, na.rm=T), sd_age = sem(AGE, na.rm=T))
 
 data_2$sum <- as.numeric(as.character(data_2$sum)) 
 
@@ -704,6 +714,30 @@ ggplot(data_2summary, aes(year, prop, colour = MED)) +
 library(reshape2)
 data_2summary2 <- recast(data_2summary, year + variable ~ MED, id.var = c("MED", "year"))
 write.csv(data_2summary2, file = "opioids_all_byname.csv")
+
+ggplot(data_2, aes(year, avg_age, colour = MED)) + 
+  geom_line() +
+  theme(legend.position = "none")
+
+# the opioid rate PER year amongst ALL patients including AGE
+data_2b <- data_1 %>%
+  group_by(year) %>%
+  summarise(avg_age = mean(AGE, na.rm=T), sd_age = sem(AGE, na.rm=T))
+
+write.csv(data_2b, file = "all_opioid_rate_byage.csv")
+
+# the opioid rate PER year amongst ALL patients including AGE and MED
+data_2c <- data_1 %>%
+  group_by(year, MED) %>%
+  summarise(avg_age = mean(AGE, na.rm=T), sd_age = sem(AGE, na.rm=T))
+
+data_2d <- recast(data_2c, year + variable ~ MED, id.var = c("MED", "year", "sd_age"))
+
+write.csv(data_2d, file = "all_opioid_rate_byage2.csv")
+
+data_2e <- recast(data_2c, year + variable ~ MED, id.var = c("MED", "year", "avg_age"))
+
+write.csv(data_2e, file = "all_opioid_rate_byage3.csv")
 ```
 
 ```{r}
@@ -1022,7 +1056,7 @@ proptrend_hpo
 ```{r}
 # the opioid rate PER year amongst ALL patients
 data_3 <- data_1 %>%
-  group_by(year, MED) %>%
+  group_by(year) %>%
   summarise(sum = sum(PATWT, na.rm=T))
 
 data_3$sum <- as.numeric(as.character(data_3$sum)) 
@@ -1074,19 +1108,19 @@ ggplot(data_3summary, aes(year, prop)) +
 ```{r}
 # the opioid rate PER year amongst BEHAVIOURAL health patients by MED and RFV
 data_4 <- data %>%
-  select(year, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
+  select(year, AGE, PATWT, RFV1, RFV2, RFV3, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
   unite(RFV, RFV1, RFV2, RFV3) %>%
    mutate(rn = row_number()) %>%
    separate_rows(RFV) %>%
    filter(RFV %in% c("Anxiety_Nervousness", "Fears_Phobias", "Depression", "Anger", "Problems_Identity_Self-esteem", "Restlessness", "Behavioral_Disturbances", "Antisocial_Behavior", "Hostile_Behavior", "Narcotic_Analgesics", "Hysterical_Behavior", "Temper_Problems", "Obsessions_Compulsions", "Disturbances_of_Sleep", "Insomnia", "Hypersomnia", "Nightmares", "Sleepwalking", "Sleep_Apnea", "Alcohol-related_Problems", "Abnormal_Drug_Usage", "Substance_Abuse", "Delusions_or_Hallucinations", "Other"))
 
 data_7 <- data_4 %>%
-   select(year, PATWT, RFV, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
+   select(year, AGE, PATWT, RFV, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
   unite(MED, MED1, MED2, MED3, MED4, MED5, MED6, MED7, MED8) %>%
    mutate(rn = row_number()) %>%
    separate_rows(MED) %>%
    filter(MED %in% c("OXYCODONE", "PROPOXYPHENE", "REMIFENTANIL", "SUFENTANIL", "TAPENTADOL", "OXYMORPHONE", "PHENEROL", "MORPHINE", "NALBUPHINE", "Narcotic_Analgesics", "LEVORPHANOL", "MEPERIDINE", "METHADONE", "DIHYDROCODEINE", "FENTANYL", "HYDROCODONE", "HYDROMORPHONE", "OPIUM", "BUPRENORPHINE", "BUTORPHANOL", "CODEINE", "PHENYLPROPANOLAMINE", "DEZOCINE", "ALFENTANIL", "ALPHAPRODINE", "DEXTROPROPOXYPHENE", "", "PENTAZOCINE")) %>%
-   group_by(rn, year, RFV) %>%
+   group_by(rn, year, AGE, RFV) %>%
    summarise(PATWT = first(PATWT), MED = toString(unique(MED))) %>%
    select(-rn)
 
@@ -1192,11 +1226,13 @@ data_7 <- data_4 %>%
 
 data_7 <- data_7[!(data_7$MED == ""), ]
 
+data_7$AGE <- as.numeric(as.character(data_7$AGE))
+
 data_8 <- data_7 %>%
   group_by(year, MED) %>%
-  summarise(sum = sum(PATWT))
+  summarise(sum = sum(PATWT), avg_age = mean(AGE), sd_age = sem(AGE, na.rm=T))
 
-data_8$sum <- as.numeric(as.character(data_8$sum)) 
+data_8$sum <- as.numeric(as.character(data_8$sum))
 
 close <- data_8 %>%
   filter(year == 2006) %>%
@@ -1233,7 +1269,7 @@ close10 <- data_8 %>%
   mutate(prop = sum/(22999745)*100)
 
 data_8summary <- rbind(close, close1, close2, close3, close4, close5, close6, close7, close8, close9, close10) %>%
-  select(year, prop, MED)
+  select(year, prop, MED, avg_age, sd_age)
 
 write.csv(data_8summary, file = "data_8summary.csv")
 
@@ -1243,6 +1279,19 @@ ggplot(data_8summary, aes(year, prop, colour = MED)) +
 
 data_8summary2 <- recast(data_8summary, year + variable ~ MED, id.var = c("MED", "year"))
 write.csv(data_8summary2, file = "mental_opioid_rate_byname.csv")
+
+# the opioid rate PER year amongst MENTAL HEALTH patients including AGE and MED
+ggplot(data_8summary, aes(year, avg_age, colour = MED)) + 
+  geom_line() +
+  theme(legend.position = "none")
+
+data_8summary2b <- recast(data_8summary, year + variable ~ MED, id.var = c("MED", "year", "prop", "sd_age"))
+
+write.csv(data_8summary2b, file = "mental_opioid_rate_byage.csv")
+
+data_8summary2c <- recast(data_8summary, year + variable ~ MED, id.var = c("MED", "year", "prop", "avg_age"))
+
+write.csv(data_8summary2c, file = "mental_opioid_rate_byage2.csv")
 ```
 
 ```{r}
@@ -1440,15 +1489,14 @@ proptest_hyf2
 proptrend_hyf2 <- prop.trend.test(HYDROCODONE_FENTANYL2$yes, HYDROCODONE_FENTANYL2$no)
 proptrend_hyf2
 ```
-```
 
 
 ```{r}
 # the overall opioid rate PER year amongst behavioural health patients ONLY
 data_6 <- data_7 %>%
-  select(year, PATWT) %>%
+  select(year, PATWT, AGE) %>%
   group_by(year) %>%
-  summarise(sum = sum(PATWT, na.rm=T))
+  summarise(sum = sum(PATWT, na.rm=T), avg_age = mean(AGE, na.rm=T), sd_age = sem(AGE, na.rm=T))
 
 closea <- data_6 %>%
   filter(year == 2006) %>%
@@ -1538,6 +1586,18 @@ proptest2
 
 proptrend2 <- prop.trend.test(data_6summaryb$yes, data_6summaryb$no)
 proptrend2
+
+# the opioid rate PER year amongst MENTAL HEALTH patients by MED including AGE
+data_8b <- data_7 %>%
+  group_by(year) %>%
+  summarise(avg_age = mean(AGE, na.rm=T), sd_age = sem(AGE, na.rm=T))
+
+ggplot(data_8b, aes(year, avg_age)) + 
+  geom_point() +
+  geom_line() +
+  theme(legend.position = "none")
+
+write.csv(data_8b, file = "mental_opioid_rate_byageonly.csv")
 ```
 
 ```{r}
