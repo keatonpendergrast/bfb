@@ -118,8 +118,9 @@ six <- six %>%
 ```
 
 ```{r}
-#combine all into one big dataset
-data <- rbind(six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen)
+#combine all into one big dataset and filter for age
+data <- rbind(six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen) %>%
+  filter(AGE >= 18)
 ```
 
 ```{r}
@@ -441,6 +442,8 @@ data_1 <- data %>%
    group_by(rn, year, AGE) %>%
    summarise(PATWT = first(PATWT), MED = toString(unique(MED))) %>%
    select(-rn)
+
+summary(data_1)
 
 #combine the combinations
     data_1[ data_1 == "HYDROCODONE, BUPRENORPHINE" ] <- "BUPRENORPHINE, HYDROCODONE"
