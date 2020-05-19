@@ -557,37 +557,37 @@ data_0$AGE <- as.numeric(as.character(data_0$AGE))
 
 close0 <- data_0 %>%
   filter(year == 2006) %>%
-  mutate(prop = sum/(sum(six$PATWT))*100)
+  mutate(prop = (sum/294180154)*100)
 close11 <- data_0 %>%
   filter(year == 2007) %>%
-  mutate(prop = sum/(sum(seven$PATWT))*100)
+  mutate(prop = (sum/296302408)*100)
 close22 <- data_0 %>%
   filter(year == 2008) %>%
-  mutate(prop = sum/(sum(eight$PATWT))*100)
+  mutate(prop = (sum/298688159)*100)
 close33 <- data_0 %>%
   filter(year == 2009) %>%
-  mutate(prop = sum/(sum(nine$PATWT))*100)
+  mutate(prop = (sum/301570342)*100)
 close44 <- data_0 %>%
   filter(year == 2010) %>%
-  mutate(prop = sum/(sum(ten$PATWT))*100)
+  mutate(prop = (sum/303627880)*100)
 close55 <- data_0 %>%
   filter(year == 2011) %>%
-  mutate(prop = sum/(sum(eleven$PATWT))*100)
+  mutate(prop = (sum/306378752)*100)
 close66 <- data_0 %>%
   filter(year == 2012) %>%
-  mutate(prop = sum/(sum(twelve$PATWT))*100)
+  mutate(prop = (sum/308698958)*100)
 close77 <- data_0 %>%
   filter(year == 2013) %>%
-  mutate(prop = sum/(sum(thirteen$PATWT))*100)
+  mutate(prop = (sum/310929426)*100)
 close88 <- data_0 %>%
   filter(year == 2014) %>%
-  mutate(prop = sum/(sum(fourteen$PATWT))*100)
+  mutate(prop = (sum/313672860)*100)
 close99 <- data_0 %>%
   filter(year == 2015) %>%
-  mutate(prop = sum/(sum(fifteen$PATWT))*100)
+  mutate(prop = (sum/316286252)*100)
 close100 <- data_0 %>%
   filter(year == 2016) %>%
-  mutate(prop = sum/(sum(sixteen$PATWT))*100)
+  mutate(prop = (sum/318015317)*100)
 
 data_0summary <- rbind(close0, close11, close22, close33, close44, close55, close66, close77, close88, close99, close100) %>%
   select(year, prop, AGE)
@@ -596,37 +596,37 @@ write.csv(data_0summary, file = "everyone_on_opioids.csv")
 
 close03 <- data_0 %>%
   filter(year == 2006) %>%
-  mutate(prop = sum(six$PATWT))
+  mutate(prop = 294180154)
 close113 <- data_0 %>%
   filter(year == 2007) %>%
-  mutate(prop = sum(seven$PATWT))
+  mutate(prop = 296302408)
 close223 <- data_0 %>%
   filter(year == 2008) %>%
-  mutate(prop = sum(eight$PATWT))
+  mutate(prop = 298688159)
 close333 <- data_0 %>%
   filter(year == 2009) %>%
-  mutate(prop = sum(nine$PATWT))
+  mutate(prop = 301570342)
 close443 <- data_0 %>%
   filter(year == 2010) %>%
-  mutate(prop = sum(ten$PATWT))
+  mutate(prop = 303627880)
 close553 <- data_0 %>%
   filter(year == 2011) %>%
-  mutate(prop = sum(eleven$PATWT))
+  mutate(prop = 306378752)
 close663 <- data_0 %>%
   filter(year == 2012) %>%
-  mutate(prop = sum(twelve$PATWT))
+  mutate(prop = 308698958)
 close773 <- data_0 %>%
   filter(year == 2013) %>%
-  mutate(prop = sum(thirteen$PATWT))
+  mutate(prop = 310929426)
 close883 <- data_0 %>%
   filter(year == 2014) %>%
-  mutate(prop = sum(fourteen$PATWT))
+  mutate(prop = 313672860)
 close993 <- data_0 %>%
   filter(year == 2015) %>%
-  mutate(prop = sum(fifteen$PATWT))
+  mutate(prop = 316286252)
 close1003 <- data_0 %>%
   filter(year == 2016) %>%
-  mutate(prop = sum(sixteen$PATWT))
+  mutate(prop = 318015317)
 
 data_0summary22 <- rbind(close03, close113, close223, close333, close443, close553, close663, close773, close883, close993, close1003) %>%
   mutate(no = prop) %>%
@@ -655,7 +655,7 @@ new$AGE <- as.numeric(as.character(new$AGE))
 new2 <- new %>%
   select(year, PATWT, AGE) %>%
   group_by(year) %>%
-  summarise(sum = sum(PATWT, na.rm=T), avg_age = mean(AGE), sd_age = sem(AGE))
+  summarise(sum = sum(PATWT, na.rm=T), avg_age = mean(AGE, na.rm=T), sd_age = sem(AGE, na.rm=T))
 ```
 
 ```{r}
@@ -668,39 +668,41 @@ data_2 <- data_1 %>%
 
 data_2$sum <- as.numeric(as.character(data_2$sum)) 
 
+sum(six$PATWT)
+
 close0 <- data_2 %>%
   filter(year == 2006) %>%
-  mutate(prop = sum/(sum(six$PATWT))*100)
+  mutate(prop = sum/(901954225)*100)
 close11 <- data_2 %>%
   filter(year == 2007) %>%
-  mutate(prop = sum/(sum(seven$PATWT))*100)
+  mutate(prop = (sum/296302408)*100)
 close22 <- data_2 %>%
   filter(year == 2008) %>%
-  mutate(prop = sum/(sum(eight$PATWT))*100)
+  mutate(prop = (sum/298688159)*100)
 close33 <- data_2 %>%
   filter(year == 2009) %>%
-  mutate(prop = sum/(sum(nine$PATWT))*100)
+  mutate(prop = (sum/301570342)*100)
 close44 <- data_2 %>%
   filter(year == 2010) %>%
-  mutate(prop = sum/(sum(ten$PATWT))*100)
+  mutate(prop = (sum/303627880)*100)
 close55 <- data_2 %>%
   filter(year == 2011) %>%
-  mutate(prop = sum/(sum(eleven$PATWT))*100)
+  mutate(prop = (sum/306378752)*100)
 close66 <- data_2 %>%
   filter(year == 2012) %>%
-  mutate(prop = sum/(sum(twelve$PATWT))*100)
+  mutate(prop = (sum/308698958)*100)
 close77 <- data_2 %>%
   filter(year == 2013) %>%
-  mutate(prop = sum/(sum(thirteen$PATWT))*100)
+  mutate(prop = (sum/310929426)*100)
 close88 <- data_2 %>%
   filter(year == 2014) %>%
-  mutate(prop = sum/(sum(fourteen$PATWT))*100)
+  mutate(prop = (sum/313672860)*100)
 close99 <- data_2 %>%
   filter(year == 2015) %>%
-  mutate(prop = sum/(sum(fifteen$PATWT))*100)
+  mutate(prop = (sum/(316286252))*100)
 close100 <- data_2 %>%
   filter(year == 2016) %>%
-  mutate(prop = sum/(sum(sixteen$PATWT))*100)
+  mutate(prop = (sum/318015317)*100)
 
 data_2summary <- rbind(close0, close11, close22, close33, close44, close55, close66, close77, close88, close99, close100) %>%
   select(MED, year, prop)
@@ -745,37 +747,37 @@ write.csv(data_2e, file = "all_opioid_rate_byage3.csv")
 
 close03a <- data_2 %>%
   filter(year == 2006) %>%
-  mutate(prop = sum(six$PATWT))
+  mutate(prop = 294180154)
 close113a <- data_2 %>%
   filter(year == 2007) %>%
-  mutate(prop = sum(seven$PATWT))
+  mutate(prop = 296302408)
 close223a <- data_2 %>%
   filter(year == 2008) %>%
-  mutate(prop = sum(eight$PATWT))
+  mutate(prop = 298688159)
 close333a <- data_2 %>%
   filter(year == 2009) %>%
-  mutate(prop = sum(nine$PATWT))
+  mutate(prop = 301570342)
 close443a <- data_2 %>%
   filter(year == 2010) %>%
-  mutate(prop = sum(ten$PATWT))
+  mutate(prop = 303627880)
 close553a <- data_2 %>%
   filter(year == 2011) %>%
-  mutate(prop = sum(eleven$PATWT))
+  mutate(prop = 306378752)
 close663a <- data_2 %>%
   filter(year == 2012) %>%
-  mutate(prop = sum(twelve$PATWT))
+  mutate(prop = 308698958)
 close773a <- data_2 %>%
   filter(year == 2013) %>%
-  mutate(prop = sum(thirteen$PATWT))
+  mutate(prop = 310929426)
 close883a <- data_2 %>%
   filter(year == 2014) %>%
-  mutate(prop = sum(fourteen$PATWT))
+  mutate(prop = 313672860)
 close993a <- data_2 %>%
   filter(year == 2015) %>%
-  mutate(prop = sum(fifteen$PATWT))
+  mutate(prop = 316286252)
 close1003a <- data_2 %>%
   filter(year == 2016) %>%
-  mutate(prop = sum(sixteen$PATWT))
+  mutate(prop = 318015317)
 
 data_2summarya <- rbind(close03a, close113a, close223a, close333a, close443a, close553a, close663a, close773a, close883a, close993a, close1003a) %>%
   mutate(no = prop) %>%
@@ -1063,37 +1065,37 @@ data_3$sum <- as.numeric(as.character(data_3$sum))
 
 close0 <- data_3 %>%
   filter(year == 2006) %>%
-  mutate(prop = sum/(sum(six$PATWT))*100)
+  mutate(prop = (sum/294180154)*100)
 close11 <- data_3 %>%
   filter(year == 2007) %>%
-  mutate(prop = sum/(sum(seven$PATWT))*100)
+  mutate(prop = (sum/296302408)*100)
 close22 <- data_3 %>%
   filter(year == 2008) %>%
-  mutate(prop = sum/(sum(eight$PATWT))*100)
+  mutate(prop = (sum/298688159)*100)
 close33 <- data_3 %>%
   filter(year == 2009) %>%
-  mutate(prop = sum/(sum(nine$PATWT))*100)
+  mutate(prop = (sum/301570342)*100)
 close44 <- data_3 %>%
   filter(year == 2010) %>%
-  mutate(prop = sum/(sum(ten$PATWT))*100)
+  mutate(prop = (sum/303627880)*100)
 close55 <- data_3 %>%
   filter(year == 2011) %>%
-  mutate(prop = sum/(sum(eleven$PATWT))*100)
+  mutate(prop = (sum/306378752)*100)
 close66 <- data_3 %>%
   filter(year == 2012) %>%
-  mutate(prop = sum/(sum(twelve$PATWT))*100)
+  mutate(prop = (sum/308698958)*100)
 close77 <- data_3 %>%
   filter(year == 2013) %>%
-  mutate(prop = sum/(sum(thirteen$PATWT))*100)
+  mutate(prop = (sum/310929426)*100)
 close88 <- data_3 %>%
   filter(year == 2014) %>%
-  mutate(prop = sum/(sum(fourteen$PATWT))*100)
+  mutate(prop = (sum/313672860)*100)
 close99 <- data_3 %>%
   filter(year == 2015) %>%
-  mutate(prop = sum/(sum(fifteen$PATWT))*100)
+  mutate(prop = (sum/316286252)*100)
 close100 <- data_3 %>%
   filter(year == 2016) %>%
-  mutate(prop = sum/(sum(sixteen$PATWT))*100)
+  mutate(prop = (sum/318015317)*100)
 
 data_3summary <- rbind(close0, close11, close22, close33, close44, close55, close66, close77, close88, close99, close100) %>%
   select(year, prop)
@@ -1230,6 +1232,10 @@ data_7$AGE <- as.numeric(as.character(data_7$AGE))
 
 data_8 <- data_7 %>%
   group_by(year, MED) %>%
+  summarise(sum = sum(PATWT))
+
+data_8b <- data_7 %>%
+  group_by(year, MED) %>%
   summarise(sum = sum(PATWT), avg_age = mean(AGE), sd_age = sem(AGE, na.rm=T))
 
 data_8$sum <- as.numeric(as.character(data_8$sum))
@@ -1269,7 +1275,7 @@ close10 <- data_8 %>%
   mutate(prop = sum/(22999745)*100)
 
 data_8summary <- rbind(close, close1, close2, close3, close4, close5, close6, close7, close8, close9, close10) %>%
-  select(year, prop, MED, avg_age, sd_age)
+  select(year, prop, MED)
 
 write.csv(data_8summary, file = "data_8summary.csv")
 
@@ -1278,20 +1284,66 @@ ggplot(data_8summary, aes(year, prop, colour = MED)) +
   theme(legend.position = "none")
 
 data_8summary2 <- recast(data_8summary, year + variable ~ MED, id.var = c("MED", "year"))
+
 write.csv(data_8summary2, file = "mental_opioid_rate_byname.csv")
 
-# the opioid rate PER year amongst MENTAL HEALTH patients including AGE and MED
-ggplot(data_8summary, aes(year, avg_age, colour = MED)) + 
+# the opioid rate PER year amongst MENTAL HEALTH patients including AGE
+ggplot(data_8b, aes(year, avg_age, colour = MED)) + 
   geom_line() +
   theme(legend.position = "none")
 
-data_8summary2b <- recast(data_8summary, year + variable ~ MED, id.var = c("MED", "year", "prop", "sd_age"))
+data_8summary2b <- recast(data_8b, year + variable ~ data_8b$MED, id.var = c("year", "sd_age", "sum", "MED"))
 
 write.csv(data_8summary2b, file = "mental_opioid_rate_byage.csv")
 
-data_8summary2c <- recast(data_8summary, year + variable ~ MED, id.var = c("MED", "year", "prop", "avg_age"))
+data_8summary2c <- recast(data_8b, year + variable ~ data_8b$MED, id.var = c("year", "sum", "MED", "avg_age"))
 
 write.csv(data_8summary2c, file = "mental_opioid_rate_byage2.csv")
+
+data_8summary2d <- data_7 %>%
+  group_by(year, RFV) %>%
+  summarise(sum = sum(PATWT))
+
+closek <- data_8summary2d %>%
+  filter(year == 2006) %>%
+  mutate(prop = sum/(24183976)*100)
+close1k <- data_8summary2d %>%
+  filter(year == 2007) %>%
+  mutate(prop = sum/(28675605)*100)
+close2k <- data_8summary2d %>%
+  filter(year == 2008) %>%
+  mutate(prop = sum/(25519383)*100)
+close3k <- data_8summary2d %>%
+  filter(year == 2009) %>%
+  mutate(prop = sum/(33422924)*100)
+close4k <- data_8summary2d %>%
+  filter(year == 2010) %>%
+  mutate(prop = sum/(22456621)*100)
+close5k <- data_8summary2d %>%
+  filter(year == 2011) %>%
+  mutate(prop = sum/(28939245)*100)
+close6k <- data_8summary2d %>%
+  filter(year == 2012) %>%
+  mutate(prop = sum/(26227511)*100)
+close7k <- data_8summary2d %>%
+  filter(year == 2013) %>%
+  mutate(prop = sum/(29973376)*100)
+close8k <- data_8summary2d %>%
+  filter(year == 2014) %>%
+  mutate(prop = sum/(31435352)*100)
+close9k <- data_8summary2d %>%
+  filter(year == 2015) %>%
+  mutate(prop = sum/(37129324)*100)
+close10k <- data_8summary2d %>%
+  filter(year == 2016) %>%
+  mutate(prop = sum/(22999745)*100)
+
+data_8summary2 <- rbind(closek, close1k, close2k, close3k, close4k, close5k, close6k, close7k, close8k, close9k, close10k) %>%
+  select(year, prop, RFV)
+
+data_8summary2e <- recast(data_8summary2, year + variable ~ data_8summary2$RFV, id.var = c("year", "RFV"))
+
+write.csv(data_8summary2e, file = "mental_opioid_rate_byRFV.csv")
 ```
 
 ```{r}
@@ -1490,7 +1542,6 @@ proptrend_hyf2 <- prop.trend.test(HYDROCODONE_FENTANYL2$yes, HYDROCODONE_FENTANY
 proptrend_hyf2
 ```
 
-
 ```{r}
 # the overall opioid rate PER year amongst behavioural health patients ONLY
 data_6 <- data_7 %>%
@@ -1592,12 +1643,12 @@ data_8b <- data_7 %>%
   group_by(year) %>%
   summarise(avg_age = mean(AGE, na.rm=T), sd_age = sem(AGE, na.rm=T))
 
-ggplot(data_8b, aes(year, avg_age)) + 
+ggplot(data_6, aes(year, avg_age)) + 
   geom_point() +
   geom_line() +
   theme(legend.position = "none")
 
-write.csv(data_8b, file = "mental_opioid_rate_byageonly.csv")
+write.csv(data_6, file = "mental_opioid_rate_byageonly.csv")
 ```
 
 ```{r}
@@ -1774,4 +1825,117 @@ library(reshape2)
 data_81summary2 <- recast(data_81summary, RFV + variable ~ MED, id.var = c("MED", "RFV"))
 
 write.csv(data_81summary2, file = "mental_bymed_andRFV.csv")
+
+close03ab <- data_81 %>%
+  filter(year == 2006) %>%
+  mutate(prop = 294180154)
+close113ab <- data_81 %>%
+  filter(year == 2007) %>%
+  mutate(prop = 296302408)
+close223ab <- data_81 %>%
+  filter(year == 2008) %>%
+  mutate(prop = 298688159)
+close333ab <- data_81 %>%
+  filter(year == 2009) %>%
+  mutate(prop = 301570342)
+close443ab <- data_81 %>%
+  filter(year == 2010) %>%
+  mutate(prop = 303627880)
+close553ab <- data_81 %>%
+  filter(year == 2011) %>%
+  mutate(prop = 306378752)
+close663ab <- data_81 %>%
+  filter(year == 2012) %>%
+  mutate(prop = 308698958)
+close773ab <- data_81 %>%
+  filter(year == 2013) %>%
+  mutate(prop = 310929426)
+close883ab <- data_81 %>%
+  filter(year == 2014) %>%
+  mutate(prop = 313672860)
+close993ab <- data_81 %>%
+  filter(year == 2015) %>%
+  mutate(prop = 316286252)
+close1003ab <- data_81 %>%
+  filter(year == 2016) %>%
+  mutate(prop = 318015317)
+
+data_2summaryab <- rbind(close03ab, close113ab, close223ab, close333ab, close443ab, close553ab, close663ab, close773ab, close883ab, close993ab, close1003ab) %>%
+  group_by(year, RFV, prop) %>%
+  summarise(sum = sum(sum)) %>%
+  mutate(yes = sum) %>%
+  mutate(no = prop) %>%
+  select(year, RFV, yes, no)
+
+Anger <- data_2summaryab %>%
+  filter(RFV == "Anger")
+
+proptest_ang <- pairwise.prop.test(Anger$yes, Anger$no)
+proptest_ang
+
+proptrend_ang <- prop.trend.test(Anger$yes, Anger$no)
+proptrend_ang
+
+Depression <- data_2summaryab %>%
+  filter(RFV == "Depression")
+
+proptest_dep <- pairwise.prop.test(Depression$yes, Depression$no)
+proptest_dep
+
+proptrend_dep <- prop.trend.test(Depression$yes, Depression $no)
+proptrend_dep
+
+Hypersomnia <- data_2summaryab %>%
+  filter(RFV == "Hypersomnia")
+
+proptest_hyp <- pairwise.prop.test(Hypersomnia$yes, Hypersomnia$no)
+proptest_hyp
+
+proptrend_hyp <- prop.trend.test(Hypersomnia$yes, Hypersomnia $no)
+proptrend_hyp
+
+Insomnia <- data_2summaryab %>%
+  filter(RFV == "Insomnia")
+
+proptest_ins <- pairwise.prop.test(Insomnia$yes, Insomnia$no)
+proptest_ins
+
+proptrend_ins <- prop.trend.test(Insomnia$yes, Insomnia$no)
+proptrend_ins
+
+Nightmares <- data_2summaryab %>%
+  filter(RFV == "Nightmares")
+
+proptest_nig <- pairwise.prop.test(Nightmares$yes, Nightmares$no)
+proptest_nig
+
+proptrend_nig <- prop.trend.test(Nightmares$yes, Nightmares$no)
+proptrend_nig
+
+Other <- data_2summaryab %>%
+  filter(RFV == "Other")
+
+proptest_oth <- pairwise.prop.test(Other$yes, Other$no)
+proptest_oth
+
+proptrend_oth <- prop.trend.test(Other$yes, Other$no)
+proptrend_oth
+
+Restlessness <- data_2summaryab %>%
+  filter(RFV == "Restlessness")
+
+proptest_res <- pairwise.prop.test(Restlessness$yes, Restlessness$no)
+proptest_res
+
+proptrend_res <- prop.trend.test(Restlessness$yes, Restlessness$no)
+proptrend_res
+
+Sleepwalking <- data_2summaryab %>%
+  filter(RFV == "Sleepwalking")
+
+proptest_sle <- pairwise.prop.test(Sleepwalking$yes, Sleepwalking$no)
+proptest_sle
+
+proptrend_sle <- prop.trend.test(Sleepwalking$yes, Sleepwalking$no)
+proptrend_sle
 ```
