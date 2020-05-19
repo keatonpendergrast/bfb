@@ -5,7 +5,7 @@ output: html_notebook
 
 ```{r}
 ## set libraries needed
-require(tidyverse)
+library(tidyverse)
 require(foreign)
 require(funModeling)
 require(Hmisc)
@@ -17,6 +17,8 @@ require(tikzDevice)
 require(usethis)
 library(stringr)
 library(goeveg)
+require(vctrs)
+require(purrr)
 ```
 
 ```{r}
@@ -443,8 +445,6 @@ data_1 <- data %>%
    summarise(PATWT = first(PATWT), MED = toString(unique(MED))) %>%
    select(-rn)
 
-summary(data_1)
-
 #combine the combinations
     data_1[ data_1 == "HYDROCODONE, BUPRENORPHINE" ] <- "BUPRENORPHINE, HYDROCODONE"
     data_1[ data_1 == "BUPRENORPHINE, OXYCODONE" ] <- "OXYCODONE, BUPRENORPHINE"
@@ -671,120 +671,111 @@ data_2 <- data_1 %>%
 
 data_2$sum <- as.numeric(as.character(data_2$sum)) 
 
-sum(six$PATWT)
-
-close0 <- data_2 %>%
-  filter(year == 2006) %>%
-  mutate(prop = sum/(901954225)*100)
-close11 <- data_2 %>%
-  filter(year == 2007) %>%
-  mutate(prop = (sum/296302408)*100)
-close22 <- data_2 %>%
-  filter(year == 2008) %>%
-  mutate(prop = (sum/298688159)*100)
-close33 <- data_2 %>%
-  filter(year == 2009) %>%
-  mutate(prop = (sum/301570342)*100)
-close44 <- data_2 %>%
-  filter(year == 2010) %>%
-  mutate(prop = (sum/303627880)*100)
-close55 <- data_2 %>%
-  filter(year == 2011) %>%
-  mutate(prop = (sum/306378752)*100)
-close66 <- data_2 %>%
-  filter(year == 2012) %>%
-  mutate(prop = (sum/308698958)*100)
-close77 <- data_2 %>%
-  filter(year == 2013) %>%
-  mutate(prop = (sum/310929426)*100)
-close88 <- data_2 %>%
-  filter(year == 2014) %>%
-  mutate(prop = (sum/313672860)*100)
-close99 <- data_2 %>%
-  filter(year == 2015) %>%
-  mutate(prop = (sum/(316286252))*100)
-close100 <- data_2 %>%
-  filter(year == 2016) %>%
-  mutate(prop = (sum/318015317)*100)
-
-data_2summary <- rbind(close0, close11, close22, close33, close44, close55, close66, close77, close88, close99, close100) %>%
-  select(MED, year, prop)
-
-write.csv(data_2summary, file = "data_2summary.csv")
-
-ggplot(data_2summary, aes(year, prop, colour = MED)) + 
-  geom_line() +
-  theme(legend.position = "none")
-
-library(reshape2)
-data_2summary2 <- recast(data_2summary, year + variable ~ MED, id.var = c("MED", "year"))
-write.csv(data_2summary2, file = "opioids_all_byname.csv")
-
-ggplot(data_2, aes(year, avg_age, colour = MED)) + 
-  geom_line() +
-  theme(legend.position = "none")
-
-# the opioid rate PER year amongst ALL patients including AGE
-data_2b <- data_1 %>%
-  group_by(year) %>%
-  summarise(avg_age = mean(AGE, na.rm=T), sd_age = sem(AGE, na.rm=T))
-
-write.csv(data_2b, file = "all_opioid_rate_byage.csv")
-
-# the opioid rate PER year amongst ALL patients including AGE and MED
-data_2c <- data_1 %>%
+data_2bc <- data_1 %>%
   group_by(year, MED) %>%
-  summarise(avg_age = mean(AGE, na.rm=T), sd_age = sem(AGE, na.rm=T))
+  summarise(sum = sum(PATWT)) %>%
+  mutate(row = row_number()) %>%
+  separate_rows(MED) %>%
+  pivot_wider(names_from = MED, values_from = sum) %>%
+  select(-row) %>%
+  group_by(year) %>%
+  summarise(OXYCODONE = sum(OXYCODONE, na.rm=TRUE), PROPOXYPHENE = sum(PROPOXYPHENE, na.rm=TRUE), SUFENTANIL = sum(SUFENTANIL, na.rm=TRUE), TAPENTADOL = sum(TAPENTADOL, na.rm=TRUE), OXYMORPHONE = sum(OXYMORPHONE, na.rm=TRUE), MORPHINE = sum(MORPHINE, na.rm=TRUE), NALBUPHINE = sum(NALBUPHINE, na.rm=TRUE), LEVORPHANOL = sum(LEVORPHANOL, na.rm=TRUE), MEPERIDINE = sum(MEPERIDINE, na.rm=TRUE), METHADONE = sum(METHADONE, na.rm=TRUE), DIHYDROCODEINE = sum(DIHYDROCODEINE, na.rm=TRUE), FENTANYL = sum(FENTANYL, na.rm=TRUE), HYDROMORPHONE = sum(HYDROMORPHONE, na.rm=TRUE), OPIUM = sum(OPIUM, na.rm=TRUE), BUPRENORPHINE = sum(BUPRENORPHINE, na.rm=TRUE), BUTORPHANOL = sum(BUTORPHANOL, na.rm=TRUE), CODEINE = sum(CODEINE, na.rm=TRUE), PENTAZOCINE = sum(PENTAZOCINE, na.rm=TRUE))
 
-data_2d <- recast(data_2c, year + variable ~ MED, id.var = c("MED", "year", "sd_age"))
+close0 <- data_2bc %>%
+  filter(year == 2006) %>%
+  summarise(OXYCODONE = (OXYCODONE/294180154)*100, PROPOXYPHENE = (PROPOXYPHENE/294180154)*100, SUFENTANIL = (SUFENTANIL/294180154)*100, TAPENTADOL = (TAPENTADOL/294180154)*100, OXYMORPHONE = (OXYMORPHONE/294180154)*100, MORPHINE = (MORPHINE/294180154)*100, NALBUPHINE = (NALBUPHINE/294180154)*100, LEVORPHANOL = (LEVORPHANOL/294180154)*100, MEPERIDINE = (MEPERIDINE/294180154)*100, METHADONE = (METHADONE/294180154)*100, DIHYDROCODEINE = (DIHYDROCODEINE/294180154)*100, FENTANYL = (FENTANYL/294180154)*100, HYDROMORPHONE = (HYDROMORPHONE/294180154)*100, OPIUM = (OPIUM/294180154)*100, BUPRENORPHINE = (BUPRENORPHINE/294180154)*100, BUTORPHANOL = (BUTORPHANOL/294180154)*100, CODEINE = (CODEINE/294180154)*100, PENTAZOCINE = (PENTAZOCINE/294180154)*100) %>%
+  mutate(year = 2006)
+close11 <- data_2bc %>%
+  filter(year == 2007) %>%
+  summarise(OXYCODONE = (OXYCODONE/296302408)*100, PROPOXYPHENE = (PROPOXYPHENE/296302408)*100, SUFENTANIL = (SUFENTANIL/296302408)*100, TAPENTADOL = (TAPENTADOL/296302408)*100, OXYMORPHONE = (OXYMORPHONE/296302408)*100, MORPHINE = (MORPHINE/296302408)*100, NALBUPHINE = (NALBUPHINE/296302408)*100, LEVORPHANOL = (LEVORPHANOL/296302408)*100, MEPERIDINE = (MEPERIDINE/296302408)*100, METHADONE = (METHADONE/296302408)*100, DIHYDROCODEINE = (DIHYDROCODEINE/296302408)*100, FENTANYL = (FENTANYL/296302408)*100, HYDROMORPHONE = (HYDROMORPHONE/296302408)*100, OPIUM = (OPIUM/296302408)*100, BUPRENORPHINE = (BUPRENORPHINE/296302408)*100, BUTORPHANOL = (BUTORPHANOL/296302408)*100, CODEINE = (CODEINE/296302408)*100, PENTAZOCINE = (PENTAZOCINE/296302408)*100) %>%
+  mutate(year = 2007)
+close22 <- data_2bc %>%
+  filter(year == 2008) %>%
+  summarise(OXYCODONE = (OXYCODONE/298688159)*100, PROPOXYPHENE = (PROPOXYPHENE/298688159)*100, SUFENTANIL = (SUFENTANIL/298688159)*100, TAPENTADOL = (TAPENTADOL/298688159)*100, OXYMORPHONE = (OXYMORPHONE/298688159)*100, MORPHINE = (MORPHINE/298688159)*100, NALBUPHINE = (NALBUPHINE/298688159)*100, LEVORPHANOL = (LEVORPHANOL/298688159)*100, MEPERIDINE = (MEPERIDINE/298688159)*100, METHADONE = (METHADONE/298688159)*100, DIHYDROCODEINE = (DIHYDROCODEINE/298688159)*100, FENTANYL = (FENTANYL/298688159)*100, HYDROMORPHONE = (HYDROMORPHONE/298688159)*100, OPIUM = (OPIUM/298688159)*100, BUPRENORPHINE = (BUPRENORPHINE/298688159)*100, BUTORPHANOL = (BUTORPHANOL/298688159)*100, CODEINE = (CODEINE/298688159)*100, PENTAZOCINE = (PENTAZOCINE/298688159)*100) %>%
+  mutate(year = 2008)
+close33 <- data_2bc %>%
+  filter(year == 2009) %>%
+    summarise(OXYCODONE = (OXYCODONE/301570342)*100, PROPOXYPHENE = (PROPOXYPHENE/301570342)*100, SUFENTANIL = (SUFENTANIL/301570342)*100, TAPENTADOL = (TAPENTADOL/301570342)*100, OXYMORPHONE = (OXYMORPHONE/301570342)*100, MORPHINE = (MORPHINE/301570342)*100, NALBUPHINE = (NALBUPHINE/301570342)*100, LEVORPHANOL = (LEVORPHANOL/301570342)*100, MEPERIDINE = (MEPERIDINE/301570342)*100, METHADONE = (METHADONE/301570342)*100, DIHYDROCODEINE = (DIHYDROCODEINE/301570342)*100, FENTANYL = (FENTANYL/301570342)*100, HYDROMORPHONE = (HYDROMORPHONE/301570342)*100, OPIUM = (OPIUM/301570342)*100, BUPRENORPHINE = (BUPRENORPHINE/301570342)*100, BUTORPHANOL = (BUTORPHANOL/301570342)*100, CODEINE = (CODEINE/301570342)*100, PENTAZOCINE = (PENTAZOCINE/301570342)*100) %>%
+  mutate(year = 2009)
+close44 <- data_2bc %>%
+  filter(year == 2010) %>%
+  summarise(OXYCODONE = (OXYCODONE/303627880)*100, PROPOXYPHENE = (PROPOXYPHENE/303627880)*100, SUFENTANIL = (SUFENTANIL/303627880)*100, TAPENTADOL = (TAPENTADOL/303627880)*100, OXYMORPHONE = (OXYMORPHONE/303627880)*100, MORPHINE = (MORPHINE/303627880)*100, NALBUPHINE = (NALBUPHINE/303627880)*100, LEVORPHANOL = (LEVORPHANOL/303627880)*100, MEPERIDINE = (MEPERIDINE/303627880)*100, METHADONE = (METHADONE/303627880)*100, DIHYDROCODEINE = (DIHYDROCODEINE/303627880)*100, FENTANYL = (FENTANYL/303627880)*100, HYDROMORPHONE = (HYDROMORPHONE/303627880)*100, OPIUM = (OPIUM/303627880)*100, BUPRENORPHINE = (BUPRENORPHINE/303627880)*100, BUTORPHANOL = (BUTORPHANOL/303627880)*100, CODEINE = (CODEINE/303627880)*100, PENTAZOCINE = (PENTAZOCINE/303627880)*100) %>%
+  mutate(year = 2010)
+close55 <- data_2bc %>%
+  filter(year == 2011) %>%
+  summarise(OXYCODONE = (OXYCODONE/306378752)*100, PROPOXYPHENE = (PROPOXYPHENE/306378752)*100, SUFENTANIL = (SUFENTANIL/306378752)*100, TAPENTADOL = (TAPENTADOL/306378752)*100, OXYMORPHONE = (OXYMORPHONE/306378752)*100, MORPHINE = (MORPHINE/306378752)*100, NALBUPHINE = (NALBUPHINE/306378752)*100, LEVORPHANOL = (LEVORPHANOL/306378752)*100, MEPERIDINE = (MEPERIDINE/306378752)*100, METHADONE = (METHADONE/306378752)*100, DIHYDROCODEINE = (DIHYDROCODEINE/306378752)*100, FENTANYL = (FENTANYL/306378752)*100, HYDROMORPHONE = (HYDROMORPHONE/306378752)*100, OPIUM = (OPIUM/306378752)*100, BUPRENORPHINE = (BUPRENORPHINE/306378752)*100, BUTORPHANOL = (BUTORPHANOL/306378752)*100, CODEINE = (CODEINE/306378752)*100, PENTAZOCINE = (PENTAZOCINE/306378752)*100) %>%
+  mutate(year = 2011)
+close66 <- data_2bc %>%
+  filter(year == 2012) %>%
+  summarise(OXYCODONE = (OXYCODONE/308698958)*100, PROPOXYPHENE = (PROPOXYPHENE/308698958)*100, SUFENTANIL = (SUFENTANIL/308698958)*100, TAPENTADOL = (TAPENTADOL/308698958)*100, OXYMORPHONE = (OXYMORPHONE/308698958)*100, MORPHINE = (MORPHINE/308698958)*100, NALBUPHINE = (NALBUPHINE/308698958)*100, LEVORPHANOL = (LEVORPHANOL/308698958)*100, MEPERIDINE = (MEPERIDINE/308698958)*100, METHADONE = (METHADONE/308698958)*100, DIHYDROCODEINE = (DIHYDROCODEINE/308698958)*100, FENTANYL = (FENTANYL/308698958)*100, HYDROMORPHONE = (HYDROMORPHONE/308698958)*100, OPIUM = (OPIUM/308698958)*100, BUPRENORPHINE = (BUPRENORPHINE/308698958)*100, BUTORPHANOL = (BUTORPHANOL/308698958)*100, CODEINE = (CODEINE/308698958)*100, PENTAZOCINE = (PENTAZOCINE/308698958)*100) %>%
+  mutate(year = 2012)
+close77 <- data_2bc %>%
+  filter(year == 2013) %>%
+  summarise(OXYCODONE = (OXYCODONE/310929426)*100, PROPOXYPHENE = (PROPOXYPHENE/310929426)*100, SUFENTANIL = (SUFENTANIL/310929426)*100, TAPENTADOL = (TAPENTADOL/310929426)*100, OXYMORPHONE = (OXYMORPHONE/310929426)*100, MORPHINE = (MORPHINE/310929426)*100, NALBUPHINE = (NALBUPHINE/310929426)*100, LEVORPHANOL = (LEVORPHANOL/310929426)*100, MEPERIDINE = (MEPERIDINE/310929426)*100, METHADONE = (METHADONE/310929426)*100, DIHYDROCODEINE = (DIHYDROCODEINE/310929426)*100, FENTANYL = (FENTANYL/310929426)*100, HYDROMORPHONE = (HYDROMORPHONE/310929426)*100, OPIUM = (OPIUM/310929426)*100, BUPRENORPHINE = (BUPRENORPHINE/310929426)*100, BUTORPHANOL = (BUTORPHANOL/310929426)*100, CODEINE = (CODEINE/310929426)*100, PENTAZOCINE = (PENTAZOCINE/310929426)*100) %>%
+  mutate(year = 2013)
+close88 <- data_2bc %>%
+  filter(year == 2014) %>%
+  summarise(OXYCODONE = (OXYCODONE/313672860)*100, PROPOXYPHENE = (PROPOXYPHENE/313672860)*100, SUFENTANIL = (SUFENTANIL/313672860)*100, TAPENTADOL = (TAPENTADOL/313672860)*100, OXYMORPHONE = (OXYMORPHONE/313672860)*100, MORPHINE = (MORPHINE/313672860)*100, NALBUPHINE = (NALBUPHINE/313672860)*100, LEVORPHANOL = (LEVORPHANOL/313672860)*100, MEPERIDINE = (MEPERIDINE/313672860)*100, METHADONE = (METHADONE/313672860)*100, DIHYDROCODEINE = (DIHYDROCODEINE/313672860)*100, FENTANYL = (FENTANYL/313672860)*100, HYDROMORPHONE = (HYDROMORPHONE/313672860)*100, OPIUM = (OPIUM/313672860)*100, BUPRENORPHINE = (BUPRENORPHINE/313672860)*100, BUTORPHANOL = (BUTORPHANOL/313672860)*100, CODEINE = (CODEINE/313672860)*100, PENTAZOCINE = (PENTAZOCINE/313672860)*100) %>%
+  mutate(year = 2014)
+close99 <- data_2bc %>%
+  filter(year == 2015) %>%
+  summarise(OXYCODONE = (OXYCODONE/316286252)*100, PROPOXYPHENE = (PROPOXYPHENE/316286252)*100, SUFENTANIL = (SUFENTANIL/316286252)*100, TAPENTADOL = (TAPENTADOL/316286252)*100, OXYMORPHONE = (OXYMORPHONE/316286252)*100, MORPHINE = (MORPHINE/316286252)*100, NALBUPHINE = (NALBUPHINE/316286252)*100, LEVORPHANOL = (LEVORPHANOL/316286252)*100, MEPERIDINE = (MEPERIDINE/316286252)*100, METHADONE = (METHADONE/316286252)*100, DIHYDROCODEINE = (DIHYDROCODEINE/316286252)*100, FENTANYL = (FENTANYL/316286252)*100, HYDROMORPHONE = (HYDROMORPHONE/316286252)*100, OPIUM = (OPIUM/316286252)*100, BUPRENORPHINE = (BUPRENORPHINE/316286252)*100, BUTORPHANOL = (BUTORPHANOL/316286252)*100, CODEINE = (CODEINE/316286252)*100, PENTAZOCINE = (PENTAZOCINE/316286252)*100) %>%
+  mutate(year = 2015)
+close100 <- data_2bc %>%
+  filter(year == 2016) %>%
+  summarise(OXYCODONE = (OXYCODONE/318015317)*100, PROPOXYPHENE = (PROPOXYPHENE/318015317)*100, SUFENTANIL = (SUFENTANIL/318015317)*100, TAPENTADOL = (TAPENTADOL/318015317)*100, OXYMORPHONE = (OXYMORPHONE/318015317)*100, MORPHINE = (MORPHINE/318015317)*100, NALBUPHINE = (NALBUPHINE/318015317)*100, LEVORPHANOL = (LEVORPHANOL/318015317)*100, MEPERIDINE = (MEPERIDINE/318015317)*100, METHADONE = (METHADONE/318015317)*100, DIHYDROCODEINE = (DIHYDROCODEINE/318015317)*100, FENTANYL = (FENTANYL/318015317)*100, HYDROMORPHONE = (HYDROMORPHONE/318015317)*100, OPIUM = (OPIUM/318015317)*100, BUPRENORPHINE = (BUPRENORPHINE/318015317)*100, BUTORPHANOL = (BUTORPHANOL/318015317)*100, CODEINE = (CODEINE/318015317)*100, PENTAZOCINE = (PENTAZOCINE/318015317)*100) %>%
+  mutate(year = 2016)
 
-write.csv(data_2d, file = "all_opioid_rate_byage2.csv")
+data_2summary <- rbind(close0, close11, close22, close33, close44, close55, close66, close77, close88, close99, close100)
 
-data_2e <- recast(data_2c, year + variable ~ MED, id.var = c("MED", "year", "avg_age"))
-
-write.csv(data_2e, file = "all_opioid_rate_byage3.csv")
+write.csv(data_2summary, file = "opioids_all_byname.csv")
 ```
 
 ```{r}
 #all patients stats tests by drug
+data_2q <- data_2bc %>%
+   pivot_longer(
+      cols = OXYCODONE:PENTAZOCINE, 
+      names_to = "MED", 
+      values_to = "yes")
 
-close03a <- data_2 %>%
+close03a <- data_2q %>%
   filter(year == 2006) %>%
   mutate(prop = 294180154)
-close113a <- data_2 %>%
+close113a <- data_2q %>%
   filter(year == 2007) %>%
   mutate(prop = 296302408)
-close223a <- data_2 %>%
+close223a <- data_2q %>%
   filter(year == 2008) %>%
   mutate(prop = 298688159)
-close333a <- data_2 %>%
+close333a <- data_2q %>%
   filter(year == 2009) %>%
   mutate(prop = 301570342)
-close443a <- data_2 %>%
+close443a <- data_2q %>%
   filter(year == 2010) %>%
   mutate(prop = 303627880)
-close553a <- data_2 %>%
+close553a <- data_2q %>%
   filter(year == 2011) %>%
   mutate(prop = 306378752)
-close663a <- data_2 %>%
+close663a <- data_2q %>%
   filter(year == 2012) %>%
   mutate(prop = 308698958)
-close773a <- data_2 %>%
+close773a <- data_2q %>%
   filter(year == 2013) %>%
   mutate(prop = 310929426)
-close883a <- data_2 %>%
+close883a <- data_2q %>%
   filter(year == 2014) %>%
   mutate(prop = 313672860)
-close993a <- data_2 %>%
+close993a <- data_2q %>%
   filter(year == 2015) %>%
   mutate(prop = 316286252)
-close1003a <- data_2 %>%
+close1003a <- data_2q %>%
   filter(year == 2016) %>%
   mutate(prop = 318015317)
 
+
 data_2summarya <- rbind(close03a, close113a, close223a, close333a, close443a, close553a, close663a, close773a, close883a, close993a, close1003a) %>%
   mutate(no = prop) %>%
-  mutate(yes = sum) %>%
   select(year, MED, yes, no)
 
 codeine <- data_2summarya %>%
@@ -841,15 +832,6 @@ proptest_hmo
 proptrend_hmo <- prop.trend.test(HYDROMORPHONE$yes, HYDROMORPHONE$no)
 proptrend_hmo
 
-HYDROMORPHONE_FENTANYL <- data_2summarya %>%
-  filter(MED == "HYDROMORPHONE, FENTANYL")
-
-proptest_hmf <- pairwise.prop.test(HYDROMORPHONE_FENTANYL$yes, HYDROMORPHONE_FENTANYL$no)
-proptest_hmf
-
-proptrend_hmf <- prop.trend.test(HYDROMORPHONE_FENTANYL$yes, HYDROMORPHONE_FENTANYL$no)
-proptrend_hmf
-
 MEPERIDINE <- data_2summarya %>%
   filter(MED == "MEPERIDINE")
 
@@ -858,15 +840,6 @@ proptest_mep
 
 proptrend_mep <- prop.trend.test(MEPERIDINE$yes, MEPERIDINE$no)
 proptrend_mep
-
-MEPERIDINE_OXYCODONE <- data_2summarya %>%
-  filter(MED == "MEPERIDINE, OXYCODONE")
-
-proptest_meo <- pairwise.prop.test(MEPERIDINE_OXYCODONE$yes, MEPERIDINE_OXYCODONE$no)
-proptest_meo
-
-proptrend_meo <- prop.trend.test(MEPERIDINE_OXYCODONE$yes, MEPERIDINE_OXYCODONE$no)
-proptrend_meo
 
 METHADONE <- data_2summarya %>%
   filter(MED == "METHADONE")
@@ -877,23 +850,6 @@ proptest_met
 proptrend_met <- prop.trend.test(METHADONE$yes, METHADONE$no)
 proptrend_met
 
-METHADONE_FENTANYL <- data_2summarya %>%
-  filter(MED == "METHADONE, FENTANYL")
-
-proptest_mef <- pairwise.prop.test(METHADONE_FENTANYL$yes, METHADONE_FENTANYL$no)
-proptest_mef
-
-proptrend_mef <- prop.trend.test(METHADONE_FENTANYL$yes, METHADONE_FENTANYL$no)
-proptrend_mef
-
-METHADONE_HYDROMORPHONE <- data_2summarya %>%
-  filter(MED == "METHADONE, HYDROMORPHONE")
-
-proptest_meh <- pairwise.prop.test(METHADONE_HYDROMORPHONE$yes, METHADONE_HYDROMORPHONE$no)
-proptest_meh
-
-proptrend_meh <- prop.trend.test(METHADONE_HYDROMORPHONE$yes, METHADONE_HYDROMORPHONE$no)
-proptrend_meh
 
 MORPHINE <- data_2summarya %>%
   filter(MED == "MORPHINE")
@@ -904,23 +860,6 @@ proptest_mor
 proptrend_mor <- prop.trend.test(MORPHINE$yes, MORPHINE$no)
 proptrend_mor
 
-MORPHINE_FENTANYL <- data_2summarya %>%
-  filter(MED == "MORPHINE, FENTANYL")
-
-proptest_mfe <- pairwise.prop.test(MORPHINE_FENTANYL$yes, MORPHINE_FENTANYL$no)
-proptest_mfe
-
-proptrend_mfe <- prop.trend.test(MORPHINE_FENTANYL$yes, MORPHINE_FENTANYL$no)
-proptrend_mfe
-
-MORPHINE_HYDROMORPHONE <- data_2summarya %>%
-  filter(MED == "MORPHINE, HYDROMORPHONE")
-
-proptest_mhy <- pairwise.prop.test(MORPHINE_HYDROMORPHONE$yes, MORPHINE_HYDROMORPHONE$no)
-proptest_mhy
-
-proptrend_mhy <- prop.trend.test(MORPHINE_HYDROMORPHONE$yes, MORPHINE_HYDROMORPHONE$no)
-proptrend_mhy
 
 OPIUM <- data_2summarya %>%
   filter(MED == "OPIUM")
@@ -940,50 +879,6 @@ proptest_oxy
 proptrend_oxy <- prop.trend.test(OXYCODONE$yes, OXYCODONE$no)
 proptrend_oxy
 
-OXYCODONE_BUPRENORPHINE <- data_2summarya %>%
-  filter(MED == "OXYCODONE, BUPRENORPHINE")
-
-proptest_obu <- pairwise.prop.test(OXYCODONE_BUPRENORPHINE$yes, OXYCODONE_BUPRENORPHINE$no)
-proptest_obu
-
-proptrend_obu <- prop.trend.test(OXYCODONE_BUPRENORPHINE$yes, OXYCODONE_BUPRENORPHINE$no)
-proptrend_obu
-
-OXYCODONE_CODEINE <- data_2summarya %>%
-  filter(MED == "OXYCODONE, CODEINE")
-
-proptest_oco <- pairwise.prop.test(OXYCODONE_CODEINE$yes, OXYCODONE_CODEINE$no)
-proptest_oco
-
-proptrend_oco <- prop.trend.test(OXYCODONE_CODEINE$yes, OXYCODONE_CODEINE$no)
-proptrend_oco
-
-OXYCODONE_FENTANYL <- data_2summarya %>%
-  filter(MED == "OXYCODONE, FENTANYL")
-
-proptest_ofn <- pairwise.prop.test(OXYCODONE_FENTANYL$yes, OXYCODONE_FENTANYL$no)
-proptest_ofn
-
-proptrend_ofn <- prop.trend.test(OXYCODONE_FENTANYL$yes, OXYCODONE_FENTANYL$no)
-proptrend_ofn
-
-OXYCODONE_METHADONE <- data_2summarya %>%
-  filter(MED == "OXYCODONE, METHADONE")
-
-proptest_ome <- pairwise.prop.test(OXYCODONE_METHADONE$yes, OXYCODONE_METHADONE$no)
-proptest_ome
-
-proptrend_ome <- prop.trend.test(OXYCODONE_METHADONE$yes, OXYCODONE_METHADONE$no)
-proptrend_ome
- 
-OXYCODONE_PROPOXYPHENE <- data_2summarya %>%
-  filter(MED == "OXYCODONE, PROPOXYPHENE")
-
-proptest_opr <- pairwise.prop.test(OXYCODONE_PROPOXYPHENE$yes, OXYCODONE_PROPOXYPHENE$no)
-proptest_opr
-
-proptrend_opr <- prop.trend.test(OXYCODONE_PROPOXYPHENE$yes, OXYCODONE_PROPOXYPHENE$no)
-proptrend_opr
 
 PENTAZOCINE <- data_2summarya %>%
   filter(MED == "PENTAZOCINE")
@@ -1029,33 +924,6 @@ proptest_bnl
 
 proptrend_bnl <- prop.trend.test(BUTORPHANOL$yes, BUTORPHANOL$no)
 proptrend_bnl
-
-FENTANYL_CODEINE <- data_2summarya %>%
-  filter(MED == "FENTANYL, CODEINE")
-
-proptest_fco <- pairwise.prop.test(FENTANYL_CODEINE$yes, FENTANYL_CODEINE$no)
-proptest_fco
-
-proptrend_fco <- prop.trend.test(FENTANYL_CODEINE$yes, FENTANYL_CODEINE$no)
-proptrend_fco
-
-HYDROMORPHONE_FENTANYL <- data_2summarya %>%
-  filter(MED == "HYDROMORPHONE, FENTANYL")
-
-proptest_hfl <- pairwise.prop.test(HYDROMORPHONE_FENTANYL$yes, HYDROMORPHONE_FENTANYL$no)
-proptest_hfl
-
-proptrend_hfl <- prop.trend.test(HYDROMORPHONE_FENTANYL$yes, HYDROMORPHONE_FENTANYL$no)
-proptrend_hfl
-
-HYDROMORPHONE_OXYCODONE <- data_2summarya %>%
-  filter(MED == "HYDROMORPHONE, OXYCODONE")
-
-proptest_hpo <- pairwise.prop.test(HYDROMORPHONE_OXYCODONE$yes, HYDROMORPHONE_OXYCODONE$no)
-proptest_hpo
-
-proptrend_hpo <- prop.trend.test(HYDROMORPHONE_OXYCODONE$yes, HYDROMORPHONE_OXYCODONE$no)
-proptrend_hpo
 ```
 
 ```{r}
