@@ -1,5 +1,5 @@
 ---
-title: "Opioid Usage Amongst Behavioural Health Patients: National Trends in the Office-Based Prescription of Pain Medications"
+title: "Opioid Usage Amongst Behavioural Health Patients: National Trends in the Office Based Prescription of Pain Medications"
 output: html_notebook
 ---
 
