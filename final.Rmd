@@ -777,6 +777,13 @@ new <- data %>%
    separate_rows(RFV) %>%
    filter(RFV %in% c("Anxiety_Nervousness", "Fears_Phobias", "Depression", "Anger", "Problems_Identity_Self-esteem", "Restlessness", "Behavioral_Disturbances", "Antisocial_Behavior", "Hostile_Behavior", "Narcotic_Analgesics", "Hysterical_Behavior", "Temper_Problems", "Obsessions_Compulsions", "Disturbances_of_Sleep", "Insomnia", "Hypersomnia", "Nightmares", "Sleepwalking", "Sleep_Apnea", "Alcohol-related_Problems", "Abnormal_Drug_Usage", "Substance_Abuse", "Delusions_or_Hallucinations", "Other"))
 
+new$PATWT <- as.numeric(as.character(new$PATWT)) 
+
+new_total <- new %>%
+  group_by(year) %>%
+  summarise(total = sum(PATWT, na.rm=T)) %>%
+  select(total)
+
 data_1 <- new %>% 
     pivot_longer(cols = starts_with('MED')) %>% 
     filter(str_detect(value, '[A-Za-z]')) %>% 
@@ -785,9 +792,20 @@ data_1 <- new %>%
     ungroup %>%        
     group_by(year) %>%
     mutate(prop = (Score/sum(Score, na.rm=T))*100) %>% 
-    pivot_wider(names_from = value, values_from = c(Score, prop))
+    pivot_wider(names_from = value, values_from = c(Score, prop)) 
 
-write.csv(data_1, file = "opioids_mental_byname.csv")
+data_1b <- data_1 %>%
+   pivot_longer(
+      cols = Score_BUPRENORPHINE:Score_OXYMORPHONE, 
+      names_to = "MED", 
+      values_to = "yes") %>%
+  group_by(year) %>%
+  summarise(sd_opiate = sd(yes, na.rm=T), opiates = sum(yes, na.rm=T))
+
+mental_table <- cbind(data_1b, new_total) %>% mutate(prop = (opiates/total)*100)
+
+write.csv(data_1, file = "proportion of mental people on opioids by name.csv")
+write.csv(mental_table, file = "overall proportion of mental people on opioids (trend).csv")
 
 data_2 <- data2 %>% 
     pivot_longer(cols = starts_with('MED')) %>% 
@@ -796,9 +814,38 @@ data_2 <- data2 %>%
     summarise(Score = sum(PATWT, na.rm=T)) %>%
     ungroup %>%        
     group_by(year) %>%
-    mutate(prop = (Score/sum(Score, na.rm=T))*100) %>% 
+    mutate(prop = (Score/sum(Score, na.rm=T))*100, sd = sd(Score, na.rm=T)) %>% 
     pivot_wider(names_from = value, values_from = c(Score, prop))
 
-write.csv(data_2, file = "opioids_all_byname.csv")
+data2_total <- data2 %>%
+  group_by(year) %>%
+  summarise(total = sum(PATWT, na.rm=T), sd_total = sd(PATWT, na.rm=T)) %>%
+  select(total, sd_total)
+
+data_2b <- data_2 %>%
+   pivot_longer(
+      cols = Score_BUPRENORPHINE:Score_LEVORPHANOL, 
+      names_to = "MED", 
+      values_to = "yes") %>%
+  group_by(year) %>%
+  summarise(sd_opiate = sd(yes, na.rm=T), opiates = sum(yes, na.rm=T))
+
+overall_table <- cbind(data_2b, data2_total) %>% mutate(prop = (opiates/total)*100)
+
+write.csv(data_2, file = "proportion of all people on opioids by name.csv")
+write.csv(overall_table, file = "overall proportion of all people on opioids (trend).csv")
 ```
 
+```{r}
+proptest_overall <- pairwise.prop.test(overall_table$opiates, overall_table$total)
+proptest_overall
+
+proptrend_overall <- prop.trend.test(overall_table$opiates, overall_table$total)
+proptrend_overall
+
+proptest_mental <- pairwise.prop.test(mental_table$opiates, mental_table$total)
+proptest_mental
+
+proptrend_mental <- prop.trend.test(mental_table$opiates, mental_table$total)
+proptrend_mental
+```
