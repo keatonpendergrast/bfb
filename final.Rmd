@@ -849,3 +849,39 @@ proptest_mental
 proptrend_mental <- prop.trend.test(mental_table$opiates, mental_table$total)
 proptrend_mental
 ```
+
+```{r}
+res6 <- prop.test(x = c(938541, 45885095), n = c(20269468, 719239392))
+res6
+
+res7 <- prop.test(x = c(1866462, 55754227), n = c(25459104, 799023339))
+res7
+
+res8 <- prop.test(x = c(1186899, 55111546), n = c(21652844, 783125331))
+res8
+
+res9 <- prop.test(x = c(3139425, 70735130), n = c(29444981, 853572568))
+res9
+
+res10 <- prop.test(x = c(1038376, 62388796), n = c(19796686, 816546273))
+res10
+
+res11 <- prop.test(x = c(2163163, 71287180), n = c(24487463, 780265475))
+res11
+
+res12 <- prop.test(x = c(1653628, 65194688), n = c(23194257, 757585138))
+res12
+
+res13 <- prop.test(x = c(1870628, 86360722), n = c(26104582, 771560011))
+res13
+
+res14 <- prop.test(x = c(2358148, 83480671), n = c(26381133, 745892798))
+res14
+
+res15 <- prop.test(x = c(1621361, 82836399), n = c(32317730, 841252183))
+res15
+
+res16 <- prop.test(x = c(2179300, 61724817), n = c(20341365, 706244389))
+res16
+```
+
