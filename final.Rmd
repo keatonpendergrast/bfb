@@ -19,6 +19,7 @@ library(stringr)
 library(goeveg)
 require(vctrs)
 require(purrr)
+require(questionr)
 ```
 
 ```{r}
@@ -848,6 +849,139 @@ proptest_mental
 
 proptrend_mental <- prop.trend.test(mental_table$opiates, mental_table$total)
 proptrend_mental
+
+morphine_mental <- c(409, 25313, 50333.14648, 10353.72388, 37033.5293, 37033.5293, 253626.6484)
+notmor_mental <- c(1186490, 2137850, 1603294.854, 1860274.276, 2321114.471, 1564324.008, 1925673.352)
+proptrend_mental_morphine <- prop.trend.test(morphine_mental, notmor_mental)
+proptrend_mental_morphine
+
+or_2006 <- matrix(c(938541, 45885095, 19330927, 673354297),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Population", "Overall Population"),
+            c("Received an Opioid", "Did not receive an Opioid")))
+
+or_2007 <-matrix(c(1866462,55754227,23592642,743269112),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Population", "Overall Population"),
+            c("Received an Opioid", "Did not receive an Opioid")))
+
+or_2008 <-matrix(c(1186899,55111546,20465945,728013785),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Population", "Overall Population"),
+            c("Received an Opioid", "Did not receive an Opioid")))
+
+or_2009 <-matrix(c(3139425,70735130,26305556,782837438),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Population", "Overall Population"),
+            c("Received an Opioid", "Did not receive an Opioid")))
+
+or_2010 <-matrix(c(1038376,62388796,18758310,754157477),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Population", "Overall Population"),
+            c("Received an Opioid", "Did not receive an Opioid")))
+
+or_2011 <-matrix(c(2163163,71287180,22324300,708978295),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Population", "Overall Population"),
+            c("Received an Opioid", "Did not receive an Opioid")))
+
+or_2012 <-matrix(c(1653628,65194688,21540629,692390450),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Population", "Overall Population"),
+            c("Received an Opioid", "Did not receive an Opioid")))
+
+or_2013 <-matrix(c(1870628,86360722,24233954,685199289),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Population", "Overall Population"),
+            c("Received an Opioid", "Did not receive an Opioid")))
+
+or_2014 <-matrix(c(2358148,83480671,24022985,662412127),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Population", "Overall Population"),
+            c("Received an Opioid", "Did not receive an Opioid")))
+
+or_2015 <-matrix(c(1621361,82836399,30696369,758415784),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Population", "Overall Population"),
+            c("Received an Opioid", "Did not receive an Opioid")))
+
+or_2016 <- matrix(c(2179300,61724817,18162065,644519572),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Population", "Overall Population"),
+            c("Received an Opioid", "Did not receive an Opioid")))
+
+odds.ratio(or_2006)
+odds.ratio(or_2007)
+odds.ratio(or_2008)
+odds.ratio(or_2009)
+odds.ratio(or_2010)
+odds.ratio(or_2011)
+odds.ratio(or_2012)
+odds.ratio(or_2013)
+odds.ratio(or_2014)
+odds.ratio(or_2015)
+odds.ratio(or_2016)
+
+orm_2008 <- matrix(c(409,1009937,1186490,54101609),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Opiate Population", "Overall Opiate Population"),
+            c("Received an Morphine", "Did not receive Morphine")))
+
+orm_2011 <- matrix(c(25313,1487788,2137850,69799392),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Opiate Population", "Overall Opiate Population"),
+            c("Received an Morphine", "Did not receive Morphine")))
+
+orm_2012 <- matrix(c(50333.146484375,2311032.36730957,1603294.85351562,62883655.6326904),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Opiate Population", "Overall Opiate Population"),
+            c("Received an Morphine", "Did not receive Morphine")))
+
+orm_2013 <- matrix(c(10353.7238769531,1902674.92504883,1860274.27612305,84458047.0749512),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Opiate Population", "Overall Opiate Population"),
+            c("Received an Morphine", "Did not receive Morphine")))
+
+orm_2014 <- matrix(c(37033.529296875,1471154.58691406,2321114.47070312,82009516.4130859),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Opiate Population", "Overall Opiate Population"),
+            c("Received an Morphine", "Did not receive Morphine")))
+
+orm_2015 <- matrix(c(57036.9921875,2923503.22161865,1564324.0078125,79912895.7783813),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Opiate Population", "Overall Opiate Population"),
+            c("Received an Morphine", "Did not receive Morphine")))
+
+orm_2016 <- matrix(c(253626.6484375,1575665.10546875,1925673.3515625,60149151.8945312),
+       nrow = 2,
+       dimnames =
+       list(c("Mental Health Opiate Population", "Overall Opiate Population"),
+            c("Received an Morphine", "Did not receive Morphine")))
+
+odds.ratio(orm_2008)
+odds.ratio(orm_2011)
+odds.ratio(orm_2012)
+odds.ratio(orm_2013)
+odds.ratio(orm_2014)
+odds.ratio(orm_2015)
+odds.ratio(orm_2016)
 ```
 
 ```{r}
